@@ -1,8 +1,10 @@
+import SectionHeaders from "@/components/layout/SectionHeaders";
 const About = () => {
   return (
     <section className="text-center my-16" id="about">
-    <p>Our story</p>
-    <p>About us</p>
+    <SectionHeaders 
+    subHeader={'Our story'}
+    mainHeader={'About us'} />
     <div className="text-gray-500 max-w-md mx-auto mt-4 flex flex-col gap-4">
       <p>
         Lorem ipsum dolor sit amet, consectetur adipisicing elit. Magni minima odit recusandae. Illum ipsa non repudiandae? Eum ipsam iste quos suscipit tempora? Aperiam esse fugiat inventore laboriosam officiis quam rem!
