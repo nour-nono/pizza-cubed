@@ -16,7 +16,7 @@ const RegisterPage = () => {
     setError(false);
     const response = await fetch("/api/register", {
       method: "POST",
-      body: JSON.stringify({ userEmail, userPassword }),
+      body: JSON.stringify({ email: userEmail, password: userPassword }),
       headers: { "Content-Type": "application/json" },
     });
     response.ok ? setUserCreated(true) : setError(true);
@@ -26,19 +26,23 @@ const RegisterPage = () => {
     <section className="mt-8">
       <h1 className="text-center text-primary text-4xl mb-4">Register</h1>
       <form className="max-w-xs mx-auto" onSubmit={handleSubmit}>
-      {userCreated && (
-        <div className="my-4 text-center">
-          User created.<br />
-          Now you can 
-          <Link className="underline" href={'/login'}>Login &raquo;</Link>
-        </div>
-      )}
-      {error && (
-        <div className="my-4 text-center">
-          An error has occurred.<br />
-          Please try again later
-        </div>
-      )}
+        {userCreated && (
+          <div className="my-4 text-center">
+            User created.
+            <br />
+            Now you can
+            <Link className="underline" href={"/login"}>
+              Login &raquo;
+            </Link>
+          </div>
+        )}
+        {error && (
+          <div className="my-4 text-center">
+            An error has occurred.
+            <br />
+            Please try again later
+          </div>
+        )}
         <input
           type="email"
           placeholder="email"
@@ -59,7 +63,9 @@ const RegisterPage = () => {
             setUserPassword(ev.target.value);
           }}
         />
-        <button type="submit" disabled={creatingUser}>Register</button>
+        <button type="submit" disabled={creatingUser}>
+          Register
+        </button>
         <div className="my-4 text-center text-gray-500">
           or login with provider
         </div>
@@ -68,8 +74,10 @@ const RegisterPage = () => {
           Login with google
         </button>
         <div className="text-center my-4 text-gray-500 border-t pt-4">
-          Existing account? 
-          <Link className="underline" href={'/login'}>Login here &raquo;</Link>
+          Existing account?
+          <Link className="underline" href={"/login"}>
+            Login here &raquo;
+          </Link>
         </div>
       </form>
     </section>
