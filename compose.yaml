@@ -1,0 +1,19 @@
+version: "3.8"
+
+services:
+  mongodb:
+    image: mongo:latest
+    container_name: pizzaCubed_mongodb
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/home/pizza-cubed/data/db
+
+  nextjs:
+    build: .
+    container_name: pizzaCubed_nextJs
+    ports:
+      - "3000:3000"
+
+volumes:
+  mongo_data:
