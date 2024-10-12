@@ -10,6 +10,7 @@
     "greet": "echo 'Hello, World!'"
   },
   "dependencies": {
+    "@auth/mongodb-adapter": "^3.7.0",
     "autoprefixer": "^10.4.20",
     "bcrypt": "^5.1.1",
     "mongodb": "^6.9.0",
