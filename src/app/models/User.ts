@@ -10,7 +10,7 @@ const UserSchema = new Schema({
 UserSchema.post("validate", function (user) {
   const passwordBeforeHash = user.password as string;
   const salt = bcrypt.genSaltSync(10);
-  user.password = bcrypt.hashSync(passwordBeforeHash, salt);
+  user.password = bcrypt.hashSync(passwordBeforeHash!, salt);
 });
 
 export const User = models?.User || model("user", UserSchema);
