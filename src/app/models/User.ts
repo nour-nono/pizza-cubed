@@ -7,7 +7,7 @@ const UserSchema = new Schema({
 }, { timestamps: true });
 
 UserSchema.post("validate", function (user) {
-  const passwordBeforeHash = user.password;
+  const passwordBeforeHash = user.password as string;
   const salt = bcrypt.genSaltSync(10);
   user.password = bcrypt.hashSync(passwordBeforeHash, salt);
 });
