@@ -21,7 +21,7 @@ export async function POST(req: Request) {
   try {
     userSchema.parse(body);
 
-    await mongoose.connect(`mongodb://${process.env.MONGODB_URI}/myapp`, {
+    await mongoose.connect(process.env.MONGODB_URI, {
       dbName: process.env.MONGODB_DB as string,
     });
 
