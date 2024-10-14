@@ -11,7 +11,7 @@ export async function POST(req: Request) {
       password: z.string().min(8, "Password need to be more than 8 carachtre"),
       confirmPassword: z
         .string()
-        .min(8, "Password need to be more than 8 carachtre"),
+        .min(8, "Confirm Password need to be more than 8 carachtre"),
     })
     .refine((data) => data.password === data.confirmPassword, {
       message: "Passwords don't match",
@@ -21,10 +21,11 @@ export async function POST(req: Request) {
   try {
     userSchema.parse(body);
 
-    await mongoose.connect(`mongodb://${process.env.MONGODB_URI}/myapp`, {
-      dbName: process.env.MONGODB_DB as string,
-    });
+    if (!process.env.MONGODB_URI) {
+      throw new Error('Missing env variable: "MONGODB_URI"');
+    }
 
+    await mongoose.connect(process.env.MONGODB_URI);
     const { email, password } = body;
     const existedUser = await User.findOne({ email });
 
