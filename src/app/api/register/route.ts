@@ -8,10 +8,10 @@ export async function POST(req: Request) {
   const userSchema = z
     .object({
       email: z.string().email("Incorrect Email"),
-      password: z.string().min(8, "Password need to be more than 8 carachtre"),
+      password: z.string().min(8, "Password need to be more than 8 characters"),
       confirmPassword: z
         .string()
-        .min(8, "Password need to be more than 8 carachtre"),
+        .min(8, "Confirm Password need to be more than 8 characters"),
     })
     .refine((data) => data.password === data.confirmPassword, {
       message: "Passwords don't match",
