@@ -4,33 +4,41 @@ import Link from 'next/link';
 import { useState } from 'react';
 
 const RegisterPage = () => {
-  const [userEmail, setUserEmail] = useState('');
-  const [userPassword, setUserPassword] = useState('');
-  const [creatingUser, setCreatingUser] = useState(false);
-  const [userCreated, setUserCreated] = useState(false);
-  const [error, setError] = useState(false);
+  const [userEmail, setUserEmail] = useState<string>("");
+  const [userPassword, setUserPassword] = useState<string>("");
+  const [userConfirmPassword, setUserConfirmPassword] = useState<string>("");
+  const [creatingUser, setCreatingUser] = useState<boolean>(false);
+  const [userCreated, setUserCreated] = useState<boolean>(false);
+  const [error, setError] = useState<{ message: string }[]>();
   async function handleSubmit(ev: React.FormEvent) {
     ev.preventDefault();
     setCreatingUser(true);
     setUserCreated(false);
-    setError(false);
-    const response = await fetch('/api/register', {
-      method: 'POST',
-      body: JSON.stringify({ email: userEmail, password: userPassword }),
-      headers: { 'Content-Type': 'application/json' },
+    setError(undefined);
+    const response = await fetch("/api/register", {
+      method: "POST",
+      body: JSON.stringify({
+        email: userEmail,
+        password: userPassword,
+        confirmPassword: userConfirmPassword,
+      }),
+      headers: { "Content-Type": "application/json" },
     });
-    response.ok ? setUserCreated(true) : setError(true);
+
+    if (response.ok) {
+      setUserCreated(true);
+    } else {
+      const data = await response.json();
+      setError(data.error);
+    }
     setCreatingUser(false);
   }
   return (
-    <section className='mt-8'>
-      <h1 className='text-center text-primary text-4xl mb-4 font-bold'>
+    <section className="mt-8">
+      <h1 className="text-center text-primary text-4xl mb-4 font-bold">
         Register
       </h1>
-      <form
-        className='max-w-xs mx-auto'
-        onSubmit={handleSubmit}
-      >
+      <form className="max-w-xs mx-auto" onSubmit={handleSubmit}>
         {userCreated && (
           <div className='my-4 text-center'>
             User created.
@@ -45,15 +53,15 @@ const RegisterPage = () => {
           </div>
         )}
         {error && (
-          <div className='my-4 text-center'>
-            An error has occurred.
-            <br />
-            Please try again later
+          <div className="my-4 text-center">
+            {error.map(({ message }, index) => (
+              <div key={`msg-err-${index}`}>{message}</div>
+            ))}
           </div>
         )}
         <input
-          type='email'
-          placeholder='email'
+          type="email"
+          placeholder="Email"
           value={userEmail}
           required
           disabled={creatingUser}
@@ -62,8 +70,8 @@ const RegisterPage = () => {
           }}
         />
         <input
-          type='password'
-          placeholder='password'
+          type="password"
+          placeholder="Password"
           value={userPassword}
           required
           disabled={creatingUser}
@@ -71,10 +79,17 @@ const RegisterPage = () => {
             setUserPassword(ev.target.value);
           }}
         />
-        <button
-          type='submit'
+        <input
+          type="password"
+          placeholder="Confirm password"
+          value={userConfirmPassword}
+          required
           disabled={creatingUser}
-        >
+          onChange={(ev) => {
+            setUserConfirmPassword(ev.target.value);
+          }}
+        />
+        <button type="submit" disabled={creatingUser}>
           Register
         </button>
         <div className='my-4 text-center text-gray-500'>
