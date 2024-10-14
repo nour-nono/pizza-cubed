@@ -1,15 +1,15 @@
 'use client';
-import Link from "next/link";
-import {usePathname} from "next/navigation";
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 
 interface UserTabsProps {
   isAdmin: boolean;
 }
 
-const UserTabs:React.FC<UserTabsProps> = ({isAdmin}) => {
+const UserTabs: React.FC<UserTabsProps> = ({ isAdmin }) => {
   const path = usePathname();
   return (
-    <div className="flex mx-auto gap-2 tabs justify-center flex-wrap">
+    <div className='flex mx-auto gap-2 tabs justify-center flex-wrap'>
       <Link
         className={path === '/profile' ? 'active' : ''}
         href={'/profile'}
@@ -46,6 +46,6 @@ const UserTabs:React.FC<UserTabsProps> = ({isAdmin}) => {
       </Link>
     </div>
   );
-}
+};
 
 export default UserTabs;
