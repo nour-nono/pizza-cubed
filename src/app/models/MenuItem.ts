@@ -1,4 +1,4 @@
-import mongoose, { model, models, Model, Schema, Document} from "mongoose";
+import mongoose, { model, models, Model, Schema, Document } from 'mongoose';
 
 /**
  * Interface representing an extra price for sizes or ingredients
@@ -37,15 +37,20 @@ const MenuItemSchema = new Schema<IMenuItem>(
   {
     name: { type: String, required: true },
     description: { type: String, required: true },
-    category: { type: mongoose.Schema.Types.ObjectId, ref: 'Category', required: true },
+    category: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Category',
+      required: true,
+    },
     basePrice: { type: Number, required: true },
     sizes: { type: [ExtraPriceSchema], default: undefined },
     extraIngredientPrices: { type: [ExtraPriceSchema], default: undefined },
   },
-  { timestamps: true }
+  { timestamps: true },
 );
 
 /**
  * Mongoose model for MenuItem
  */
-export const MenuItem: Model<IMenuItem> = models.MenuItem || model<IMenuItem>("MenuItem", MenuItemSchema);
+export const MenuItem: Model<IMenuItem> =
+  models.MenuItem || model<IMenuItem>('MenuItem', MenuItemSchema);

@@ -1,4 +1,4 @@
-import { models, model, Model, Schema, Document } from "mongoose";
+import { models, model, Model, Schema, Document } from 'mongoose';
 
 /**
  * Interface representing a Category document
@@ -16,10 +16,11 @@ const CategorySchema = new Schema<ICategory>(
   {
     name: { type: String, required: true, unique: true },
   },
-  { timestamps: true }
+  { timestamps: true },
 );
 
 /**
  * Mongoose model for the Category
  */
-export const Category: Model<ICategory> = models.Category || model<ICategory>("Category", CategorySchema);
+export const Category: Model<ICategory> =
+  models.Category || model<ICategory>('Category', CategorySchema);
