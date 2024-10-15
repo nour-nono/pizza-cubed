@@ -45,7 +45,5 @@ export async function POST(req: Request) {
     console.log(">>", error);
     const { errors, status } = error as { errors: any; status?: number };
     return Response.json({ error: errors }, { status: status || 500 });
-  } finally {
-    mongoose.disconnect();
   }
 }
