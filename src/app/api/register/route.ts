@@ -21,10 +21,13 @@ export async function POST(req: Request) {
   try {
     userSchema.parse(body);
 
+    if (!process.env.MONGODB_URI) {
+      throw new Error('Missing env variable: "MONGODB_URI"');
+    }
+
     await mongoose.connect(process.env.MONGODB_URI, {
       dbName: process.env.MONGODB_DB as string,
     });
-
     const { email, password } = body;
     const existedUser = await User.findOne({ email });
 
@@ -44,7 +47,5 @@ export async function POST(req: Request) {
     console.log('>>', error);
     const { errors, status } = error as { errors: any; status?: number };
     return Response.json({ error: errors }, { status: status || 500 });
-  } finally {
-    mongoose.disconnect();
   }
 }
