@@ -17,8 +17,8 @@ export const authOptions = {
       clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
     }),
     CredentialsProvider({
-      id: "credentials",
-      name: "Credentials",
+      id: 'credentials',
+      name: 'Credentials',
       credentials: {
         email: { label: "Email", type: "email" },
         password: { label: "Password", type: "password" },
@@ -32,7 +32,9 @@ export const authOptions = {
         if (!process.env.MONGODB_URI) {
           throw new Error('Missing env variable: "MONGODB_URI"');
         }
-        mongoose.connect(process.env.MONGODB_URI, { dbName: process.env.MONGODB_DB as string, });
+        mongoose.connect(process.env.MONGODB_URI, {
+          dbName: process.env.MONGODB_DB as string,
+        });
         const user = await User.findOne({ email });
         const passwordOk = user && bcrypt.compareSync(password, user.password);
         if (passwordOk) {

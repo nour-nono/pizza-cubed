@@ -1,5 +1,5 @@
-"use client";
-import { SessionProvider } from "next-auth/react";
+'use client';
+import { SessionProvider } from 'next-auth/react';
 const AppContext = ({ children }: any) => {
   return <SessionProvider>{children}</SessionProvider>;
 };

@@ -1,4 +1,4 @@
-import { models, model, Model, Schema, Document } from "mongoose";
+import { models, model, Model, Schema, Document } from 'mongoose';
 
 // Define an interface for the Order document
 interface IOrder extends Document {
@@ -24,8 +24,9 @@ const OrderSchema = new Schema<IOrder>(
     cartProducts: { type: Object, required: true },
     paid: { type: Boolean, default: false },
   },
-  { timestamps: true }
+  { timestamps: true },
 );
 
 // Create and export the Order model
-export const Order: Model<IOrder> = models?.Order || model<IOrder>("Order", OrderSchema);
+export const Order: Model<IOrder> =
+  models?.Order || model<IOrder>('Order', OrderSchema);

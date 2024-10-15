@@ -1,5 +1,4 @@
-
-import { models, model, Model, Schema, Document } from "mongoose";
+import { models, model, Model, Schema, Document } from 'mongoose';
 
 /**
  * Interface representing a UserInfo document
@@ -27,10 +26,11 @@ const UserInfoSchema = new Schema<IUserInfo>(
     phone: { type: String },
     admin: { type: Boolean, default: false },
   },
-  { timestamps: true }
+  { timestamps: true },
 );
 
 /**
  * Mongoose model for UserInfo
  */
-export const UserInfo: Model<IUserInfo> = models.UserInfo || model<IUserInfo>("UserInfo", UserInfoSchema);
+export const UserInfo: Model<IUserInfo> =
+  models.UserInfo || model<IUserInfo>('UserInfo', UserInfoSchema);
