@@ -1,5 +1,5 @@
-import { model, Model, Schema, Document, models } from "mongoose";
-import bcrypt from "bcrypt";
+import { model, Model, Schema, Document, models } from 'mongoose';
+import bcrypt from 'bcrypt';
 
 /**
  * Interface representing a User document
@@ -21,14 +21,14 @@ const UserSchema = new Schema<IUser>(
     email: { type: String, required: true, unique: true },
     password: { type: String, required: true },
   },
-  { timestamps: true }
+  { timestamps: true },
 );
 
 /**
  * Middleware to hash the password before saving
  */
-UserSchema.pre<IUser>("save", async function (next) {
-  if (!this.isModified("password")) return next();
+UserSchema.pre<IUser>('save', async function (next) {
+  if (!this.isModified('password')) return next();
 
   try {
     const salt = await bcrypt.genSalt(10);
@@ -42,11 +42,14 @@ UserSchema.pre<IUser>("save", async function (next) {
 /**
  * Method to compare passwords
  */
-UserSchema.methods.comparePassword = async function (candidatePassword: string): Promise<boolean> {
+UserSchema.methods.comparePassword = async function (
+  candidatePassword: string,
+): Promise<boolean> {
   return bcrypt.compare(candidatePassword, this.password);
 };
 
 /**
  * Mongoose model for User
  */
-export const User: Model<IUser> = models.User || model<IUser>("User", UserSchema);
+export const User: Model<IUser> =
+  models.User || model<IUser>('User', UserSchema);
