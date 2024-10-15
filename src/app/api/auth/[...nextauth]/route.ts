@@ -32,7 +32,7 @@ export const authOptions = {
         if (!process.env.MONGODB_URI) {
           throw new Error('Missing env variable: "MONGODB_URI"');
         }
-        mongoose.connect(process.env.MONGODB_URI);
+        mongoose.connect(process.env.MONGODB_URI, { dbName: process.env.MONGODB_DB as string, });
         const user = await User.findOne({ email });
         const passwordOk = user && bcrypt.compareSync(password, user.password);
         if (passwordOk) {
