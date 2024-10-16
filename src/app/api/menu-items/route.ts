@@ -108,7 +108,7 @@ export async function PUT(req: Request) {
   mongoose.connect(process.env.MONGODB_URI);
   const { _id, ...data } = validationResult.data;
   const result = await MenuItem.updateOne({ _id }, data);
-  if (result.modifiedCount === 0) {
+  if (!result.modifiedCount) {
     return Response.json(
       {
         error: [

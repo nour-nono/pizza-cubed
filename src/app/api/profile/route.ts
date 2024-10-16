@@ -49,14 +49,23 @@ export async function PUT(req: Request) {
     throw new Error('Missing env variable: "MONGODB_URI"');
   }
   mongoose.connect(process.env.MONGODB_URI);
-  const userInfoDoc = await UserInfo.updateOne(
-    { email },
-    validationResult.data,
-    {
-      upsert: true,
-    },
-  );
-  return Response.json(userInfoDoc);
+  const result = await UserInfo.updateOne({ email }, validationResult.data, {
+    upsert: true,
+  });
+
+  if (!result.matchedCount) {
+    return Response.json(
+      {
+        error: [
+          {
+            message: 'User not found',
+          },
+        ],
+      },
+      { status: 404 },
+    );
+  }
+  return Response.json({ message: 'User infos has been updated successfully' });
 }
 
 export async function GET() {

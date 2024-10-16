@@ -56,7 +56,7 @@ export async function PUT(req: Request) {
   mongoose.connect(process.env.MONGODB_URI);
   const { _id, name } = validationResult.data;
   const result = await Category.updateOne({ _id }, { name });
-  if (result.modifiedCount === 0) {
+  if (!result.modifiedCount) {
     return Response.json(
       {
         error: [
