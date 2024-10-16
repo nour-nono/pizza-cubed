@@ -73,6 +73,12 @@ export async function isAdmin() {
   return userInfo.admin;
 }
 
+export async function getUserEmail() {
+  const session = await getServerSession(authOptions);
+  const userEmail = session?.user?.email;
+  return userEmail;
+}
+
 const handler = NextAuth(authOptions);
 
 export { handler as GET, handler as POST };
