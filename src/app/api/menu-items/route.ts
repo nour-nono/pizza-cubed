@@ -1,8 +1,11 @@
 import { isAdmin } from "@/app/api/auth/[...nextauth]/route";
-import { MenuItem } from "@/models/MenuItem";
+import { MenuItem } from "@/app/models/MenuItem";
 import mongoose from "mongoose";
 
-export async function POST(req) {
+export async function POST(req: Request) {
+  if (!process.env.MONGODB_URI) {
+    throw new Error('Missing env variable: "MONGODB_URI"');
+  }
   mongoose.connect(process.env.MONGODB_URI);
   const data = await req.json();
   if (await isAdmin()) {
@@ -13,7 +16,10 @@ export async function POST(req) {
   }
 }
 
-export async function PUT(req) {
+export async function PUT(req: Request) {
+  if (!process.env.MONGODB_URI) {
+    throw new Error('Missing env variable: "MONGODB_URI"');
+  }
   mongoose.connect(process.env.MONGODB_URI);
   if (await isAdmin()) {
     const { _id, ...data } = await req.json();
@@ -23,11 +29,17 @@ export async function PUT(req) {
 }
 
 export async function GET() {
+  if (!process.env.MONGODB_URI) {
+    throw new Error('Missing env variable: "MONGODB_URI"');
+  }
   mongoose.connect(process.env.MONGODB_URI);
   return Response.json(await MenuItem.find());
 }
 
-export async function DELETE(req) {
+export async function DELETE(req: Request) {
+  if (!process.env.MONGODB_URI) {
+    throw new Error('Missing env variable: "MONGODB_URI"');
+  }
   mongoose.connect(process.env.MONGODB_URI);
   const url = new URL(req.url);
   const _id = url.searchParams.get("_id");
