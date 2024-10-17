@@ -34,11 +34,13 @@ export const authOptions: NextAuthOptions = {
 
         if (!email || !password) return null;
 
-        if (!process.env.MONGODB_URI) {
-          throw new Error('Missing env variable: "MONGODB_URI"');
+        if (!process.env.MONGODB_URI || !process.env.MONGODB_DB) {
+          throw new Error(
+            'Missing env variables: "MONGODB_URI" Or "MONGODB_DB"',
+          );
         }
         mongoose.connect(process.env.MONGODB_URI, {
-          dbName: process.env.MONGODB_DB as string,
+          dbName: process.env.MONGODB_DB,
         });
         const user = await User.findOne({ email });
         const passwordOk = user && bcrypt.compareSync(password, user.password);
@@ -59,12 +61,10 @@ export async function isAdmin() {
     return false;
   }
 
-  if (!process.env.MONGODB_URI) {
-    throw new Error('Missing env variable: "MONGODB_URI"');
+  if (!process.env.MONGODB_URI || !process.env.MONGODB_DB) {
+    throw new Error('Missing env variables: "MONGODB_URI" Or "MONGODB_DB"');
   }
-  mongoose.connect(process.env.MONGODB_URI, {
-    dbName: process.env.MONGODB_DB as string,
-  });
+  mongoose.connect(process.env.MONGODB_URI, { dbName: process.env.MONGODB_DB });
   const userInfo = await UserInfo.findOne({ email: userEmail });
 
   if (!userInfo) {
