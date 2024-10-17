@@ -39,6 +39,6 @@ const DeleteButton = ({ label, onDelete }) => {
       {label}
     </button>
   );
-}
+};
 
 export default DeleteButton;
