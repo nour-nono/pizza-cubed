@@ -1,22 +1,42 @@
 'use client';
-import Link from 'next/link';
 import Image from 'next/image';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { signIn } from 'next-auth/react';
+import { useRouter } from 'next/navigation';
 
 export default function LoginPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loginInProgress, setLoginInProgress] = useState(false);
+  const [loggingSuccess, setLoggingSuccess] = useState(false);
+  const [error, setError] = useState('');
+  const router = useRouter();
 
   async function handleSubmit(ev: React.FormEvent) {
     ev.preventDefault();
     setLoginInProgress(true);
+    setError('');
 
-    await signIn('credentials', { email, password, callbackUrl: '/' });
+    const res = await signIn('credentials', {
+      email,
+      password,
+      redirect: false,
+    });
+    if (res?.ok) {
+      setLoggingSuccess(true);
+    } else {
+      setError('Invalid email or password');
+    }
 
     setLoginInProgress(false);
   }
+
+  useEffect(() => {
+    if (loggingSuccess) {
+      router.push('/');
+    }
+  }, [loggingSuccess, router]);
+
   return (
     <section className='mt-8'>
       <h1 className='text-center text-primary text-4xl mb-4 font-bold'>
@@ -46,8 +66,9 @@ export default function LoginPage() {
           disabled={loginInProgress}
           type='submit'
         >
-          Login
+          {loginInProgress ? 'Logging in...' : 'Login'}
         </button>
+        {error && <p style={{ color: 'red' }}>{error}</p>}
         <div className='my-4 text-center text-gray-500'>
           or login with provider
         </div>
