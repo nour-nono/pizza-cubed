@@ -21,12 +21,11 @@ export async function POST(req: Request) {
   try {
     userSchema.parse(body);
 
-    if (!process.env.MONGODB_URI) {
-      throw new Error('Missing env variable: "MONGODB_URI"');
+    if (!process.env.MONGODB_URI || !process.env.MONGODB_DB) {
+      throw new Error('Missing env variables: "MONGODB_URI" Or "MONGODB_DB"');
     }
-
-    await mongoose.connect(process.env.MONGODB_URI, {
-      dbName: process.env.MONGODB_DB as string,
+    mongoose.connect(process.env.MONGODB_URI, {
+      dbName: process.env.MONGODB_DB,
     });
     const { email, password } = body;
     const existedUser = await User.findOne({ email });
@@ -44,7 +43,6 @@ export async function POST(req: Request) {
       message: 'User created successfully',
     });
   } catch (error) {
-    console.log('>>', error);
     const { errors, status } = error as { errors: any; status?: number };
     return Response.json({ error: errors }, { status: status || 500 });
   }
