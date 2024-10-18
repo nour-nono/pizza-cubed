@@ -79,7 +79,7 @@ export default function LoginPage() {
         >
           <Image
             src={'/google.png'}
-            alt={''}
+            alt={'Google logo'}
             width={24}
             height={24}
           />
