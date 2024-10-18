@@ -64,7 +64,9 @@ export async function isAdmin() {
   if (!process.env.MONGODB_URI || !process.env.MONGODB_DB) {
     throw new Error('Missing env variables: "MONGODB_URI" Or "MONGODB_DB"');
   }
-  mongoose.connect(process.env.MONGODB_URI, { dbName: process.env.MONGODB_DB });
+  await mongoose.connect(process.env.MONGODB_URI, {
+    dbName: process.env.MONGODB_DB,
+  });
   const userInfo = await UserInfo.findOne({ email: userEmail });
 
   if (!userInfo) {

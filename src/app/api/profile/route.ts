@@ -48,7 +48,9 @@ export async function PUT(req: Request) {
   if (!process.env.MONGODB_URI || !process.env.MONGODB_DB) {
     throw new Error('Missing env variables: "MONGODB_URI" Or "MONGODB_DB"');
   }
-  mongoose.connect(process.env.MONGODB_URI, { dbName: process.env.MONGODB_DB });
+  await mongoose.connect(process.env.MONGODB_URI, {
+    dbName: process.env.MONGODB_DB,
+  });
   const result = await UserInfo.updateOne({ email }, validationResult.data, {
     upsert: true,
   });
@@ -78,7 +80,9 @@ export async function GET() {
   if (!process.env.MONGODB_URI || !process.env.MONGODB_DB) {
     throw new Error('Missing env variables: "MONGODB_URI" Or "MONGODB_DB"');
   }
-  mongoose.connect(process.env.MONGODB_URI, { dbName: process.env.MONGODB_DB });
+  await mongoose.connect(process.env.MONGODB_URI, {
+    dbName: process.env.MONGODB_DB,
+  });
   const user = await User.aggregate([
     {
       $match: { email },
@@ -98,7 +102,6 @@ export async function GET() {
       $project: {
         password: 0,
         'userInfos.email': 0,
-        'userInfos.admin': 0,
       },
     },
   ]);

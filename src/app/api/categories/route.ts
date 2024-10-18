@@ -23,7 +23,9 @@ export async function POST(req: Request) {
   if (!process.env.MONGODB_URI || !process.env.MONGODB_DB) {
     throw new Error('Missing env variables: "MONGODB_URI" Or "MONGODB_DB"');
   }
-  mongoose.connect(process.env.MONGODB_URI, { dbName: process.env.MONGODB_DB });
+  await mongoose.connect(process.env.MONGODB_URI, {
+    dbName: process.env.MONGODB_DB,
+  });
   const categoryDoc = await Category.create({
     name: validationResult.data.name,
   });
@@ -53,7 +55,9 @@ export async function PUT(req: Request) {
   if (!process.env.MONGODB_URI || !process.env.MONGODB_DB) {
     throw new Error('Missing env variables: "MONGODB_URI" Or "MONGODB_DB"');
   }
-  mongoose.connect(process.env.MONGODB_URI, { dbName: process.env.MONGODB_DB });
+  await mongoose.connect(process.env.MONGODB_URI, {
+    dbName: process.env.MONGODB_DB,
+  });
   const { _id, name } = validationResult.data;
   const result = await Category.updateOne({ _id }, { name });
   if (!result.modifiedCount) {
@@ -79,7 +83,9 @@ export async function DELETE(req: Request) {
   if (!process.env.MONGODB_URI || !process.env.MONGODB_DB) {
     throw new Error('Missing env variables: "MONGODB_URI" Or "MONGODB_DB"');
   }
-  mongoose.connect(process.env.MONGODB_URI, { dbName: process.env.MONGODB_DB });
+  await mongoose.connect(process.env.MONGODB_URI, {
+    dbName: process.env.MONGODB_DB,
+  });
   const url = new URL(req.url);
   const _id = url.searchParams.get('_id');
 
@@ -102,7 +108,9 @@ export async function GET() {
   if (!process.env.MONGODB_URI || !process.env.MONGODB_DB) {
     throw new Error('Missing env variables: "MONGODB_URI" Or "MONGODB_DB"');
   }
-  mongoose.connect(process.env.MONGODB_URI, { dbName: process.env.MONGODB_DB });
+  await mongoose.connect(process.env.MONGODB_URI, {
+    dbName: process.env.MONGODB_DB,
+  });
   const categories = await Category.find();
   return Response.json(categories);
 }
