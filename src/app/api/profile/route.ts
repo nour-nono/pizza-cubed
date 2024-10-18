@@ -1,4 +1,5 @@
 import { isAdmin, getUserEmail } from '@/app/api/auth/[...nextauth]/route';
+import { getUsers } from '@/app/lib/userInfos';
 import { User } from '@/app/models/User';
 import { UserInfo } from '@/app/models/UserInfo';
 import mongoose from 'mongoose';
@@ -83,28 +84,6 @@ export async function GET() {
   await mongoose.connect(process.env.MONGODB_URI, {
     dbName: process.env.MONGODB_DB,
   });
-  const user = await User.aggregate([
-    {
-      $match: { email },
-    },
-    {
-      $lookup: {
-        from: 'userinfos',
-        localField: 'email',
-        foreignField: 'email',
-        as: 'userInfos',
-      },
-    },
-    {
-      $unwind: { path: '$userInfos', preserveNullAndEmptyArrays: true },
-    },
-    {
-      $project: {
-        password: 0,
-        'userInfos.email': 0,
-      },
-    },
-  ]);
-
+  const user = await getUsers({ email });
   return Response.json(user);
 }
