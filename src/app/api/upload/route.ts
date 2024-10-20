@@ -18,14 +18,10 @@ export async function ConnectToDB() {
 
 export async function POST(request: Request) {
   const body = await request.json();
-  const { email, imageUrl } = body;
-  // console.log(email, imageUrl);
+  const { email, image } = body;
+
   await ConnectToDB();
-  // const res = await User.findByIdAndUpdate(
-  //   { email },
-  //   { imageUrl },
-  //   { upsert: true },
-  // );
-  // console.log(res);
+  const res = await User.updateOne({ email }, { image });
+
   return Response.json({ message: 'Image uploaded successfully' });
 }

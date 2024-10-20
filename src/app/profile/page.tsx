@@ -15,14 +15,13 @@ export default function ProfilePage() {
 
   useEffect(() => {
     if (status === 'authenticated') {
-      fetch('/api/profile').then((response) => {
-        response.json().then((data) => {
-          console.log(data);
-
+      fetch('/api/profile').then(response => {
+        response.json().then(data => {
+          data = data[0];
           setUser(data);
-          setIsAdmin(data.admin);
+          setIsAdmin(data?.userInfos?.admin);
           setProfileFetched(true);
-        });
+        })
       });
     }
   }, [session, status]);
@@ -48,13 +47,14 @@ export default function ProfilePage() {
     });
   }
 
+  if (status === 'unauthenticated') {
+    return redirect('/login'); // Redirect to login page
+  }
+
   if (status === 'loading' || !profileFetched) {
     return <p>Loading...</p>;
   }
 
-  if (status === 'unauthenticated') {
-    return redirect('/login'); // Redirect to login page
-  }
 
   return (
     <section className='mt-8'>

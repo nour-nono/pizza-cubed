@@ -2,6 +2,8 @@
 import AddressInputs from '@/components/layout/AddressInputs';
 import { useState } from 'react';
 import { CldUploadWidget, CldImage } from 'next-cloudinary';
+import Image from 'next/image';
+import { useProfile } from '@/components/UseProfile';
 
 export default function UserForm({ user, onSave }) {
   const [userName, setUserName] = useState(user?.name || '');
@@ -10,7 +12,11 @@ export default function UserForm({ user, onSave }) {
   const [postalCode, setPostalCode] = useState(user?.postalCode || '');
   const [city, setCity] = useState(user?.city || '');
   const [country, setCountry] = useState(user?.country || '');
+  const [imageUrl, setImageUrl] = useState(
+    user?.image || 'samples/man-portrait',
+  );
   const [admin, setAdmin] = useState(user?.admin || false);
+  const { data: loggedInUserData } = useProfile();
 
   function handleAddressChange(propName, value) {
     if (propName === 'phone') setPhone(value);
@@ -22,6 +28,86 @@ export default function UserForm({ user, onSave }) {
 
   return (
     <div className='md:flex gap-4'>
+      {/* <div>
+        <div className='p-2 rounded-lg relative max-w-52'>
+          {imageUrl.startsWith('http') ? (
+            <Image
+              className="rounded-lg w-full h-full mb-1"
+              src={imageUrl}
+              width={250}
+              height={250}
+              alt='Profile Image'
+              // layout='fill'
+              // objectFit='contain'
+            />
+          ) : (
+            <CldImage
+              className="rounded-lg w-full h-full mb-1"
+              src={imageUrl} // Use this sample image or upload your own via the Media Explorer
+              width={250}
+              height={250}
+              alt='Profile Image'
+              crop={{
+                type: 'auto',
+                source: true,
+              }}
+            />
+          )}
+          <CldUploadWidget
+            signatureEndpoint='/api/sign-image' 
+            onClose={async (result) => {
+              console.log('result from UserForm', result);
+              
+              if (result.event === 'success') {
+                const res = await fetch('/api/upload', {
+                  method: 'POST',
+                  headers: {
+                    'Content-Type': 'application/json',
+                  },
+                  body: JSON.stringify({
+                    email: user?.email,
+                    image: results.info.public_id,
+                  }),
+                });
+                if (res.ok) {
+                  console.log('Image uploaded successfully');
+                  setImageUrl(results.info.secure_url);
+                }}
+              }
+            }
+            onSuccess={async (results) => {
+              console.log('result from UserForm', results);
+              const res = await fetch('/api/upload', {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                  email: user?.email,
+                  image: results.info.public_id,
+                }),
+              });
+              if (res.ok) {
+                console.log('Image uploaded successfully');
+                setImageUrl(results.info.secure_url);
+              }
+            }}
+            options={{ sources: ['local'], maxFiles: 1 }}
+          >
+            {({ open }) => {
+              return (
+                <button
+                  type='button'
+                  onClick={() => open()}
+                  className='block border border-gray-300 rounded-lg p-2 text-center cursor-pointer'
+                >
+                  Upload an Image
+                </button>
+              );
+            }}
+          </CldUploadWidget>
+        </div>
+      </div> */}
       <form
         className='grow'
         onSubmit={(ev) =>
@@ -36,46 +122,6 @@ export default function UserForm({ user, onSave }) {
           })
         }
       >
-        {/* <CldImage
-          src='vluxuh1d58bd3g3tcowe' // Use this sample image or upload your own via the Media Explorer
-          width='500' // Transform the image: auto-crop to square aspect_ratio
-          height='500'
-          alt='Profile Image'
-          crop={{
-            type: 'auto',
-            source: true,
-          }}
-        />
-        <CldUploadWidget
-          signatureEndpoint='/api/sign-image'
-          onSuccess={async (results) => {
-            console.log("public_id", results.info.public_id);
-            console.log("email", user);
-            const res = await fetch('/api/upload', {
-              method: 'POST',
-              headers: {
-                'Content-Type': 'application/json',
-              },
-              body: JSON.stringify({
-                image: results.info.public_id,
-                email: user?.email,
-              }),
-            });
-            console.log(res);
-          }}
-          options={{ sources: ['local'] }}
-        >
-          {({ open }) => {
-            return (
-              <button
-                type='button'
-                onClick={() => open()}
-              >
-                Upload an Image
-              </button>
-            );
-          }}
-        </CldUploadWidget> */}
         <label>First and last name</label>
         <input
           type='text'
@@ -91,12 +137,22 @@ export default function UserForm({ user, onSave }) {
           placeholder={'email'}
           id='emailInput'
         />
-
         <AddressInputs
           addressProps={{ phone, streetAddress, postalCode, city, country }}
           setAddressProp={handleAddressChange}
         />
-
+        {/* {loggedInUserData?.userInfos?.admin && (
+          <div>
+            <label className="p-2 inline-flex items-center gap-2 mb-2" htmlFor="adminCheck">
+              <input
+                id="adminCheck" type="checkbox" className="" value={'1'}
+                checked={admin}
+                onChange={ev => setAdmin(ev.target.checked)}
+              />
+              <span>Admin</span>
+            </label>
+          </div>
+        )} */}
         <button type='submit'>Save</button>
       </form>
     </div>
