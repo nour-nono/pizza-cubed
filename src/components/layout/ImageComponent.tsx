@@ -1,6 +1,6 @@
 import Image from 'next/image';
 import { CldImage, CldUploadWidget } from 'next-cloudinary';
-import toast, {Toaster} from 'react-hot-toast';
+import toast, { Toaster } from 'react-hot-toast';
 
 const ImageComponent = ({ imageUrl, setImageUrl }) => {
   const isHttpUrl = imageUrl.startsWith('http');
@@ -19,7 +19,7 @@ const ImageComponent = ({ imageUrl, setImageUrl }) => {
       toast.success('Image uploaded successfully');
       setImageUrl(results.info.secure_url);
     }
-  }
+  };
   return (
     <>
       <Toaster />

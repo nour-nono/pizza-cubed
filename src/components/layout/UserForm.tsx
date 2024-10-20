@@ -9,12 +9,18 @@ import ImageComponent from '@/components/layout/ImageComponent';
 export default function UserForm({ user, onSave }) {
   // const [userName, setUserName] = useState(user?.name || '');
   const [phone, setPhone] = useState(user?.userInfos?.phone || '');
-  const [streetAddress, setStreetAddress] = useState(user?.userInfos?.streetAddress || '');
-  const [postalCode, setPostalCode] = useState(user?.userInfos?.postalCode || '');
+  const [streetAddress, setStreetAddress] = useState(
+    user?.userInfos?.streetAddress || '',
+  );
+  const [postalCode, setPostalCode] = useState(
+    user?.userInfos?.postalCode || '',
+  );
   const [city, setCity] = useState(user?.userInfos?.city || '');
   const [country, setCountry] = useState(user?.userInfos?.country || '');
   const [admin, setAdmin] = useState(user?.userInfos?.admin || false);
-  const [imageUrl, setImageUrl] = useState(user?.image || 'samples/man-portrait');
+  const [imageUrl, setImageUrl] = useState(
+    user?.image || 'samples/man-portrait',
+  );
   const { data: loggedInUserData } = useProfile();
 
   function handleAddressChange(propName, value) {
@@ -29,12 +35,15 @@ export default function UserForm({ user, onSave }) {
     <div className='md:flex gap-4'>
       <div>
         <div className='p-2 rounded-lg relative max-w-52'>
-          <ImageComponent imageUrl={imageUrl} setImageUrl={setImageUrl} />
+          <ImageComponent
+            imageUrl={imageUrl}
+            setImageUrl={setImageUrl}
+          />
         </div>
       </div>
       <form
         className='grow'
-        onSubmit={(ev) =>{
+        onSubmit={(ev) => {
           const Ins = {
             // name: userName,
             phone,
@@ -43,14 +52,18 @@ export default function UserForm({ user, onSave }) {
             city,
             country,
             postalCode,
-          }
+          };
           for (let key in Ins) {
-            if (Ins[key] === null || Ins[key] === undefined || Ins[key] === '') {
+            if (
+              Ins[key] === null ||
+              Ins[key] === undefined ||
+              Ins[key] === ''
+            ) {
               delete Ins[key];
+            }
           }
-      }
-          onSave(ev, Ins)}
-        }
+          onSave(ev, Ins);
+        }}
       >
         {/* <label>First and last name</label>
         <input
@@ -73,11 +86,17 @@ export default function UserForm({ user, onSave }) {
         />
         {loggedInUserData?.userInfos?.admin && (
           <div>
-            <label className="p-2 inline-flex items-center gap-2 mb-2" htmlFor="adminCheck">
+            <label
+              className='p-2 inline-flex items-center gap-2 mb-2'
+              htmlFor='adminCheck'
+            >
               <input
-                id="adminCheck" type="checkbox" className="" value={1}
+                id='adminCheck'
+                type='checkbox'
+                className=''
+                value={1}
                 checked={admin}
-                onChange={ev => setAdmin(ev.target.checked)}
+                onChange={(ev) => setAdmin(ev.target.checked)}
               />
               <span>Admin</span>
             </label>

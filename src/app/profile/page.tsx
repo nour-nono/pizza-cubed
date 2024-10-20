@@ -15,13 +15,13 @@ export default function ProfilePage() {
 
   useEffect(() => {
     if (status === 'authenticated') {
-      fetch('/api/profile').then(response => {
-        response.json().then(data => {
+      fetch('/api/profile').then((response) => {
+        response.json().then((data) => {
           data = data[0];
           setUser(data);
           setIsAdmin(data?.userInfos?.admin);
           setProfileFetched(true);
-        })
+        });
       });
     }
   }, [session, status]);
@@ -53,7 +53,6 @@ export default function ProfilePage() {
   if (status === 'loading' || !profileFetched) {
     return <p>Loading...</p>;
   }
-
 
   return (
     <section className='mt-8'>
