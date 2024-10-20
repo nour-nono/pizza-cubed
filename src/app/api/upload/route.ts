@@ -1,5 +1,7 @@
 import mongoose from 'mongoose';
 import { User } from '@/app/models/User';
+import { getServerSession } from 'next-auth';
+import { authOptions } from '@/app/api/auth/[...nextauth]/route';
 
 export async function ConnectToDB() {
   if (!process.env.MONGODB_URI || !process.env.MONGODB_DB) {
@@ -18,7 +20,9 @@ export async function ConnectToDB() {
 
 export async function POST(request: Request) {
   const body = await request.json();
-  const { email, image } = body;
+  const session = await getServerSession(authOptions);
+  const email = session?.user?.email;
+  const { image } = body;
 
   await ConnectToDB();
   const res = await User.updateOne({ email }, { image });
