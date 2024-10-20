@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { CldUploadWidget, CldImage } from 'next-cloudinary';
 import Image from 'next/image';
 import { useProfile } from '@/components/UseProfile';
+import ImageComponent from '@/components/layout/ImageComponent';
 
 export default function UserForm({ user, onSave }) {
   const [userName, setUserName] = useState(user?.name || '');
@@ -28,86 +29,11 @@ export default function UserForm({ user, onSave }) {
 
   return (
     <div className='md:flex gap-4'>
-      {/* <div>
+      <div>
         <div className='p-2 rounded-lg relative max-w-52'>
-          {imageUrl.startsWith('http') ? (
-            <Image
-              className="rounded-lg w-full h-full mb-1"
-              src={imageUrl}
-              width={250}
-              height={250}
-              alt='Profile Image'
-              // layout='fill'
-              // objectFit='contain'
-            />
-          ) : (
-            <CldImage
-              className="rounded-lg w-full h-full mb-1"
-              src={imageUrl} // Use this sample image or upload your own via the Media Explorer
-              width={250}
-              height={250}
-              alt='Profile Image'
-              crop={{
-                type: 'auto',
-                source: true,
-              }}
-            />
-          )}
-          <CldUploadWidget
-            signatureEndpoint='/api/sign-image' 
-            onClose={async (result) => {
-              console.log('result from UserForm', result);
-              
-              if (result.event === 'success') {
-                const res = await fetch('/api/upload', {
-                  method: 'POST',
-                  headers: {
-                    'Content-Type': 'application/json',
-                  },
-                  body: JSON.stringify({
-                    email: user?.email,
-                    image: results.info.public_id,
-                  }),
-                });
-                if (res.ok) {
-                  console.log('Image uploaded successfully');
-                  setImageUrl(results.info.secure_url);
-                }}
-              }
-            }
-            onSuccess={async (results) => {
-              console.log('result from UserForm', results);
-              const res = await fetch('/api/upload', {
-                method: 'POST',
-                headers: {
-                  'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                  email: user?.email,
-                  image: results.info.public_id,
-                }),
-              });
-              if (res.ok) {
-                console.log('Image uploaded successfully');
-                setImageUrl(results.info.secure_url);
-              }
-            }}
-            options={{ sources: ['local'], maxFiles: 1 }}
-          >
-            {({ open }) => {
-              return (
-                <button
-                  type='button'
-                  onClick={() => open()}
-                  className='block border border-gray-300 rounded-lg p-2 text-center cursor-pointer'
-                >
-                  Upload an Image
-                </button>
-              );
-            }}
-          </CldUploadWidget>
+          <ImageComponent imageUrl={imageUrl} setImageUrl={setImageUrl} />
         </div>
-      </div> */}
+      </div>
       <form
         className='grow'
         onSubmit={(ev) =>
