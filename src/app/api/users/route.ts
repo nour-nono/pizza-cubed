@@ -26,3 +26,22 @@ export async function GET() {
     );
   }
 }
+
+export async function PUT(req: Request) {
+  const url = new URL(req.url);
+  const _id = url.searchParams.get('_id');
+
+  const updateUserSchema = z.object({
+    _id: z.string().refine((val) => {
+      return mongoose.Types.ObjectId.isValid(val);
+    }, 'User id is incorrect'),
+  });
+  const validationResult = updateUserSchema.safeParse({ _id });
+
+  if (!validationResult.success) {
+    return Response.json({ error: validationResult.error.issues });
+  }
+
+  await User.updateOne({ _id }, { admin: true });
+  return Response.json({ message: 'User role has been updated successfully' });
+}
