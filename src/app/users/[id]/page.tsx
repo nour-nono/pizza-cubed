@@ -11,6 +11,14 @@ const EditUserPage = () => {
   const { loading: profileLoading, data: profileData } = useProfile();
   const { id } = useParams();
 
+    useEffect(() => {
+      fetch('/api/profile?_id=' + id).then((res) => {
+        res.json().then((user) => {
+          setUser(user);
+        });
+      });
+    }, []);
+
   if (profileLoading) {
     return 'Loading user info...';
   }
@@ -18,14 +26,6 @@ const EditUserPage = () => {
   if (!profileData?.userInfos?.admin) {
     return 'Not an admin';
   }
-
-  useEffect(() => {
-    fetch('/api/profile?_id=' + id).then((res) => {
-      res.json().then((user) => {
-        setUser(user);
-      });
-    });
-  }, []);
 
   async function handleSaveButtonClick(ev, data) {
     ev.preventDefault();

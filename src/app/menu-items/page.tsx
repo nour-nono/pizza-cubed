@@ -11,13 +11,6 @@ const MenuItemPage = () => {
   const { loading: profileLoading, data: profileData } = useProfile();
   const [menuItems, setMenuItems] = useState([]);
 
-  if (profileLoading) {
-    return 'Loading user info...';
-  }
-
-  if (!profileData?.userInfos?.admin) {
-    return 'Not an admin';
-  }
   useEffect(() => {
     fetch('/api/menu-items').then((res) => {
       res.json().then((menus) => {
@@ -25,6 +18,14 @@ const MenuItemPage = () => {
       });
     });
   }, []);
+
+  if (profileLoading) {
+    return 'Loading user info...';
+  }
+
+  if (!profileData?.userInfos?.admin) {
+    return 'Not an admin';
+  }
   return (
     <section className='mt-8 max-w-2xl mx-auto'>
       <UserTabs isAdmin={true} />

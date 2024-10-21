@@ -16,6 +16,15 @@ const EditMenuItemPage = () => {
   const [redirectToItems, setRedirectToItems] = useState(false);
   const { loading: profileLoading, data: profileData } = useProfile();
 
+    useEffect(() => {
+      fetch('/api/menu-items').then((res) => {
+        res.json().then((items) => {
+          const item = items.find((i) => i._id === id);
+          setMenuItem(item);
+        });
+      });
+    }, []);
+
   if (profileLoading) {
     return 'Loading user info...';
   }
@@ -23,15 +32,6 @@ const EditMenuItemPage = () => {
   if (!profileData?.userInfos?.admin) {
     return 'Not an admin';
   }
-
-  useEffect(() => {
-    fetch('/api/menu-items').then((res) => {
-      res.json().then((items) => {
-        const item = items.find((i) => i._id === id);
-        setMenuItem(item);
-      });
-    });
-  }, []);
 
   async function handleFormSubmit(ev, data) {
     ev.preventDefault();

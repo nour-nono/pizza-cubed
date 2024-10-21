@@ -8,6 +8,14 @@ export default function UsersPage() {
   const [users, setUsers] = useState([]);
   const { loading: profileLoading, data: profileData } = useProfile();
 
+    useEffect(() => {
+      fetch('/api/users').then((response) => {
+        response.json().then((users) => {
+          setUsers(users);
+        });
+      });
+    }, []);
+
   if (profileLoading) {
     return 'Loading user info...';
   }
@@ -15,14 +23,6 @@ export default function UsersPage() {
   if (!profileData?.userInfos?.admin) {
     return 'Not an admin';
   }
-
-  useEffect(() => {
-    fetch('/api/users').then((response) => {
-      response.json().then((users) => {
-        setUsers(users);
-      });
-    });
-  }, []);
 
   return (
     <section className='max-w-2xl mx-auto mt-8'>
