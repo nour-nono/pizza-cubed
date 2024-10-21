@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import DeleteButton from '@/components/DeleteButton';
 import { useProfile } from '@/components/UseProfile';
 import toast, { Toaster } from 'react-hot-toast';
-const CategoriesPage:React.FC = () => {
+const CategoriesPage: React.FC = () => {
   const [allCategories, setAllCategories] = useState([]);
   const [categoryName, setCategoryName] = useState('');
   const { loading: profileLoading, data: profileData } = useProfile();
@@ -148,6 +148,6 @@ const CategoriesPage:React.FC = () => {
       </div>
     </section>
   );
-}
+};
 
 export default CategoriesPage;

@@ -17,7 +17,7 @@ interface ReturnedData {
   } | null;
 }
 
-export function useProfile():Partial<ReturnedData> {
+export function useProfile(): Partial<ReturnedData> {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
   useEffect(() => {
