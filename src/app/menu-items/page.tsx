@@ -1,6 +1,22 @@
-import UserTabs from '@/components/layout/UserTabs';
+"use client";
 
-export default function MenuItemPage() {
+import UserTabs from '@/components/layout/UserTabs';
+import { useProfile } from '@/components/UseProfile';
+
+
+
+const MenuItemPage = () => {
+
+  const { loading: profileLoading, data: profileData } = useProfile();
+
+  if (profileLoading) {
+    return 'Loading user info...';
+  }
+
+  if (!profileData?.userInfos?.admin) {
+    return 'Not an admin';
+  }
+
   return (
     <section className='mt-8'>
       <UserTabs isAdmin={true} />
@@ -24,3 +40,5 @@ export default function MenuItemPage() {
     </section>
   );
 }
+
+export default  MenuItemPage;

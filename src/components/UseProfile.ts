@@ -1,6 +1,23 @@
 import { useEffect, useState } from 'react';
 
-export function useProfile() {
+interface ReturnedData {
+  loading: boolean;
+  data: {
+    user: string;
+    email: string;
+    image: string;
+    userInfos: {
+      email: string;
+      streetAddress: string;
+      postalCode: string;
+      city: string;
+      phone: string;
+      admin: boolean;
+    };
+  } | null;
+}
+
+export function useProfile():Partial<ReturnedData> {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
   useEffect(() => {

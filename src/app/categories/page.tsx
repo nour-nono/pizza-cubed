@@ -4,11 +4,19 @@ import { useEffect, useState } from 'react';
 import DeleteButton from '@/components/DeleteButton';
 import { useProfile } from '@/components/UseProfile';
 import toast, { Toaster } from 'react-hot-toast';
-export default function CategoriesPage() {
+const CategoriesPage:React.FC = () => {
   const [allCategories, setAllCategories] = useState([]);
   const [categoryName, setCategoryName] = useState('');
   const { loading: profileLoading, data: profileData } = useProfile();
   const [editedCategory, setEditedCategory] = useState(null);
+
+  if (profileLoading) {
+    return 'Loading user info...';
+  }
+
+  if (!profileData?.userInfos?.admin) {
+    return 'Not an admin';
+  }
 
   const getAllCategories = () => {
     fetch('/api/categories').then((res) => {
@@ -62,14 +70,6 @@ export default function CategoriesPage() {
 
     getAllCategories();
   };
-
-  if (profileLoading) {
-    return 'Loading user info...';
-  }
-
-  if (!profileData?.userInfos?.admin) {
-    return 'Not an admin';
-  }
 
   return (
     <section className='mt-8 max-w-lg mx-auto'>
@@ -149,3 +149,5 @@ export default function CategoriesPage() {
     </section>
   );
 }
+
+export default CategoriesPage;
