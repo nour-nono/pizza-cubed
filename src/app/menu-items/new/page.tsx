@@ -64,4 +64,4 @@ const NewMenuItemPage = () => {
   );
 }
 
-export default function NewMenuItemPage;
+export default NewMenuItemPage;
