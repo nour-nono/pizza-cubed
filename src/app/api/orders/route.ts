@@ -1,6 +1,6 @@
 import { isAdmin, getUserEmail } from '@/app/api/auth/[...nextauth]/route';
 import { MongoDBConnection } from '@/app/lib/mongoClient';
-import { Order } from '@/app/models/Order';
+import { Order } from '@/models/Order';
 import mongoose from 'mongoose';
 import { z } from 'zod';
 

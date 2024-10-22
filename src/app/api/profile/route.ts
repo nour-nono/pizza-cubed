@@ -1,7 +1,7 @@
 import { isAdmin, getUserEmail } from '@/app/api/auth/[...nextauth]/route';
 import { getUsers } from '@/app/lib/userInfos';
-import { User } from '@/app/models/User';
-import { UserInfo } from '@/app/models/UserInfo';
+import { User } from '@/models/User';
+import { UserInfo } from '@/models/UserInfo';
 import mongoose from 'mongoose';
 import { z } from 'zod';
 

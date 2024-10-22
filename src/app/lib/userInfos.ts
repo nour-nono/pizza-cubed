@@ -1,5 +1,5 @@
 import { PipelineStage } from 'mongoose';
-import { User } from '../models/User';
+import { User } from '@/models/User';
 
 export async function getUsers(matcher?: Record<string, any>) {
   const options: PipelineStage[] = [
