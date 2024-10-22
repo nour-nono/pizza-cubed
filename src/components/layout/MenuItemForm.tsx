@@ -3,7 +3,7 @@ import MenuItemPriceProps from '@/components/layout/MenuItemPriceProps';
 import { useEffect, useState } from 'react';
 
 const MenuItemForm = ({ onSubmit, menuItem }) => {
-  const [image, setImage] = useState(menuItem?.image || '');
+  const [image, setImage] = useState(menuItem?.image || 'cld-sample-4');
   const [name, setName] = useState(menuItem?.name || '');
   const [description, setDescription] = useState(menuItem?.description || '');
   const [basePrice, setBasePrice] = useState(menuItem?.basePrice || '');
