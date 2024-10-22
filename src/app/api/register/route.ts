@@ -1,6 +1,7 @@
-import { User } from '@/app/models/User';
+import { User } from '@/models/User';
 import mongoose from 'mongoose';
 import { z } from 'zod';
+import bcrypt from 'bcrypt';
 
 export async function POST(req: Request) {
   const body = await req.json();
@@ -21,12 +22,11 @@ export async function POST(req: Request) {
   try {
     userSchema.parse(body);
 
-    if (!process.env.MONGODB_URI) {
-      throw new Error('Missing env variable: "MONGODB_URI"');
+    if (!process.env.MONGODB_URI || !process.env.MONGODB_DB) {
+      throw new Error('Missing env variables: "MONGODB_URI" Or "MONGODB_DB"');
     }
-
-    await mongoose.connect(process.env.MONGODB_URI, {
-      dbName: process.env.MONGODB_DB as string,
+    mongoose.connect(process.env.MONGODB_URI, {
+      dbName: process.env.MONGODB_DB,
     });
     const { email, password } = body;
     const existedUser = await User.findOne({ email });
@@ -38,13 +38,14 @@ export async function POST(req: Request) {
       };
     }
 
-    const user = new User({ email, password });
+    const salt = await bcrypt.genSalt(10);
+    const Hashedpassword = await bcrypt.hash(password, salt);
+    const user = new User({ email, password: Hashedpassword });
     await user.save();
     return Response.json({
       message: 'User created successfully',
     });
   } catch (error) {
-    console.log('>>', error);
     const { errors, status } = error as { errors: any; status?: number };
     return Response.json({ error: errors }, { status: status || 500 });
   }

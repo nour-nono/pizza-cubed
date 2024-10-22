@@ -48,7 +48,7 @@ export default function AddressInputs({
           />
         </div>
       </div>
-      <label htmlFor='countryInput'>Country</label>
+      {/* <label htmlFor='countryInput'>Country</label>
       <input
         disabled={disabled}
         type='text'
@@ -56,7 +56,7 @@ export default function AddressInputs({
         value={country || ''}
         onChange={(ev) => setAddressProp('country', ev.target.value)}
         id='countryInput'
-      />
+      /> */}
     </>
   );
 }

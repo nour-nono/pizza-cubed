@@ -1,6 +1,6 @@
 import Image from 'next/image';
-import MenuItem from '../menu/MenuItem';
-import SectionHeaders from './SectionHeaders';
+import MenuItem from '@/components/menu/MenuItem';
+import SectionHeaders from '@/components/layout/SectionHeaders';
 export default function Menu() {
   return (
     <section className='text-center'>
