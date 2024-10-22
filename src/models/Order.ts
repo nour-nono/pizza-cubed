@@ -9,6 +9,7 @@ interface IOrder extends Document {
   city: string;
   cartProducts: Record<string, any>; // Consider defining a more specific type for cartProducts
   paid: boolean;
+  canceled: boolean;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -23,6 +24,7 @@ const OrderSchema = new Schema<IOrder>(
     city: { type: String, required: true },
     cartProducts: { type: Object, required: true },
     paid: { type: Boolean, default: false },
+    canceled: { type: Boolean, default: false },
   },
   { timestamps: true },
 );

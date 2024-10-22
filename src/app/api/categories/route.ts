@@ -1,47 +1,116 @@
-import { isAdmin } from "@/app/api/auth/[...nextauth]/route";
-import { Category } from "@/models/Category";
-import mongoose from "mongoose";
-import { NextRequest, NextResponse } from "next/server";
+import { isAdmin } from '@/app/api/auth/[...nextauth]/route';
+import { Category } from '@/models/Category';
+import mongoose from 'mongoose';
+import { z } from 'zod';
 
-interface CategoryRequest extends NextRequest {
-    json: () => Promise<{ name: string; _id?: string }>;
+export async function POST(req: Request) {
+  if (!(await isAdmin())) {
+    return Response.json({ message: 'Access denied' }, { status: 403 });
+  }
+
+  const body = await req.json();
+  const createCategorySchema = z.object({
+    name: z
+      .string({ message: 'Category name should be a string' })
+      .min(1, 'Category name is too short'),
+  });
+  const validationResult = createCategorySchema.safeParse(body);
+
+  if (!validationResult.success) {
+    return Response.json({ error: validationResult.error.issues });
+  }
+
+  if (!process.env.MONGODB_URI || !process.env.MONGODB_DB) {
+    throw new Error('Missing env variables: "MONGODB_URI" Or "MONGODB_DB"');
+  }
+  await mongoose.connect(process.env.MONGODB_URI, {
+    dbName: process.env.MONGODB_DB,
+  });
+  const categoryDoc = await Category.create({
+    name: validationResult.data.name,
+  });
+  return Response.json(categoryDoc);
 }
 
-mongoose.connect(process.env.MONGO_URL as string);
+export async function PUT(req: Request) {
+  if (!(await isAdmin())) {
+    return Response.json({ message: 'Access denied' }, { status: 403 });
+  }
 
-export async function POST(req: CategoryRequest) {
-    const { name } = await req.json();
+  const body = await req.json();
+  const updateCategorySchema = z.object({
+    _id: z.string().refine((val) => {
+      return mongoose.Types.ObjectId.isValid(val);
+    }, 'Category id is incorrect'),
+    name: z
+      .string({ message: 'Category name should be a string' })
+      .min(1, 'Category name is too short'),
+  });
+  const validationResult = updateCategorySchema.safeParse(body);
 
-    if (await isAdmin()) {
-        const categoryDoc = await Category.create({ name });
-        return NextResponse.json(categoryDoc);
-    } else {
-        return NextResponse.json({});
-    }
+  if (!validationResult.success) {
+    return Response.json({ error: validationResult.error.issues });
+  }
+
+  if (!process.env.MONGODB_URI || !process.env.MONGODB_DB) {
+    throw new Error('Missing env variables: "MONGODB_URI" Or "MONGODB_DB"');
+  }
+  await mongoose.connect(process.env.MONGODB_URI, {
+    dbName: process.env.MONGODB_DB,
+  });
+  const { _id, name } = validationResult.data;
+  const result = await Category.updateOne({ _id }, { name });
+  if (!result.modifiedCount) {
+    return Response.json(
+      {
+        error: [
+          {
+            message: 'Category not found',
+          },
+        ],
+      },
+      { status: 404 },
+    );
+  }
+  return Response.json({ message: 'Category has been updated successfully' });
 }
 
-export async function PUT(req: CategoryRequest) {
-    const { _id, name } = await req.json();
+export async function DELETE(req: Request) {
+  if (!(await isAdmin())) {
+    return Response.json({ message: 'Access denied' }, { status: 403 });
+  }
 
-    if (await isAdmin()) {
-        await Category.updateOne({ _id }, { name });
-    }
+  if (!process.env.MONGODB_URI || !process.env.MONGODB_DB) {
+    throw new Error('Missing env variables: "MONGODB_URI" Or "MONGODB_DB"');
+  }
+  await mongoose.connect(process.env.MONGODB_URI, {
+    dbName: process.env.MONGODB_DB,
+  });
+  const url = new URL(req.url);
+  const _id = url.searchParams.get('_id');
 
-    return NextResponse.json(true);
+  const updateCategorySchema = z.object({
+    _id: z.string().refine((val) => {
+      return mongoose.Types.ObjectId.isValid(val);
+    }, 'Category id is incorrect'),
+  });
+  const validationResult = updateCategorySchema.safeParse({ _id });
+
+  if (!validationResult.success) {
+    return Response.json({ error: validationResult.error.issues });
+  }
+
+  await Category.deleteOne({ _id });
+  return Response.json({ message: 'Category has been deleted successfully' });
 }
 
 export async function GET() {
-    const categories = await Category.find();
-    return NextResponse.json(categories);
-}
-
-export async function DELETE(req: CategoryRequest) {
-    const url = new URL(req.url);
-    const _id = url.searchParams.get('_id');
-
-    if (await isAdmin()) {
-        await Category.deleteOne({ _id });
-    }
-
-    return NextResponse.json(true);
+  if (!process.env.MONGODB_URI || !process.env.MONGODB_DB) {
+    throw new Error('Missing env variables: "MONGODB_URI" Or "MONGODB_DB"');
+  }
+  await mongoose.connect(process.env.MONGODB_URI, {
+    dbName: process.env.MONGODB_DB,
+  });
+  const categories = await Category.find();
+  return Response.json(categories);
 }

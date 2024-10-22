@@ -1,15 +1,27 @@
 'use client';
 import AddressInputs from '@/components/layout/AddressInputs';
 import { useState } from 'react';
+import { CldUploadWidget, CldImage } from 'next-cloudinary';
+import Image from 'next/image';
+import { useProfile } from '@/components/UseProfile';
+import ImageComponent from '@/components/layout/ImageComponent';
 
 export default function UserForm({ user, onSave }) {
-  const [userName, setUserName] = useState(user?.name || '');
-  const [phone, setPhone] = useState(user?.phone || '');
-  const [streetAddress, setStreetAddress] = useState(user?.streetAddress || '');
-  const [postalCode, setPostalCode] = useState(user?.postalCode || '');
-  const [city, setCity] = useState(user?.city || '');
-  const [country, setCountry] = useState(user?.country || '');
-  const [admin, setAdmin] = useState(user?.admin || false);
+  // const [userName, setUserName] = useState(user?.name || '');
+  const [phone, setPhone] = useState(user?.userInfos?.phone || '');
+  const [streetAddress, setStreetAddress] = useState(
+    user?.userInfos?.streetAddress || '',
+  );
+  const [postalCode, setPostalCode] = useState(
+    user?.userInfos?.postalCode || '',
+  );
+  const [city, setCity] = useState(user?.userInfos?.city || '');
+  const [country, setCountry] = useState(user?.userInfos?.country || '');
+  const [admin, setAdmin] = useState(user?.userInfos?.admin || false);
+  const [imageUrl, setImageUrl] = useState(
+    user?.image || 'samples/man-portrait',
+  );
+  const { data: loggedInUserData } = useProfile();
 
   function handleAddressChange(propName, value) {
     if (propName === 'phone') setPhone(value);
@@ -21,27 +33,45 @@ export default function UserForm({ user, onSave }) {
 
   return (
     <div className='md:flex gap-4'>
+      <div>
+        <div className='p-2 rounded-lg relative max-w-52'>
+          <ImageComponent
+            imageUrl={imageUrl}
+            setImageUrl={setImageUrl}
+          />
+        </div>
+      </div>
       <form
         className='grow'
-        onSubmit={(ev) =>
-          onSave(ev, {
-            name: userName,
+        onSubmit={(ev) => {
+          const Ins = {
+            // name: userName,
             phone,
             admin,
             streetAddress,
             city,
             country,
             postalCode,
-          })
-        }
+          };
+          for (let key in Ins) {
+            if (
+              Ins[key] === null ||
+              Ins[key] === undefined ||
+              Ins[key] === ''
+            ) {
+              delete Ins[key];
+            }
+          }
+          onSave(ev, Ins);
+        }}
       >
-        <label>First and last name</label>
+        {/* <label>First and last name</label>
         <input
           type='text'
           placeholder='First and last name'
           value={userName}
           onChange={(ev) => setUserName(ev.target.value)}
-        />
+        /> */}
         <label htmlFor='emailInput'>Email</label>
         <input
           type='email'
@@ -50,12 +80,28 @@ export default function UserForm({ user, onSave }) {
           placeholder={'email'}
           id='emailInput'
         />
-
         <AddressInputs
           addressProps={{ phone, streetAddress, postalCode, city, country }}
           setAddressProp={handleAddressChange}
         />
-
+        {loggedInUserData?.userInfos?.admin && (
+          <div>
+            <label
+              className='p-2 inline-flex items-center gap-2 mb-2'
+              htmlFor='adminCheck'
+            >
+              <input
+                id='adminCheck'
+                type='checkbox'
+                className=''
+                value={1}
+                checked={admin}
+                onChange={(ev) => setAdmin(ev.target.checked)}
+              />
+              <span>Admin</span>
+            </label>
+          </div>
+        )}
         <button type='submit'>Save</button>
       </form>
     </div>

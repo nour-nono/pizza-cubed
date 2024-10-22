@@ -1,32 +1,44 @@
-import { authOptions, isAdmin } from "@/app/api/auth/[...nextauth]/route";
-import { Order } from "@/models/Order";
-import mongoose from "mongoose";
-import { getServerSession } from "next-auth";
-import { NextApiRequest, NextApiResponse } from "next";
+import { isAdmin, getUserEmail } from '@/app/api/auth/[...nextauth]/route';
+import { MongoDBConnection } from '@/app/lib/mongoClient';
+import { Order } from '@/models/Order';
+import mongoose from 'mongoose';
+import { z } from 'zod';
 
-export async function GET(req: NextApiRequest, res: NextApiResponse) {
-    await mongoose.connect(process.env.MONGO_URL as string);
+export async function GET() {
+  await MongoDBConnection();
+  let options = {};
 
-    const session = await getServerSession(authOptions);
-    const userEmail = session?.user?.email;
-    const admin = await isAdmin();
+  if (!(await isAdmin())) {
+    const email = await getUserEmail();
+    options = {
+      userEmail: email,
+    };
+  }
+  const orders = await Order.find(options);
+  if (!orders.length) {
+    return Response.json(
+      { error: [{ message: 'No orders founds' }] },
+      { status: 404 },
+    );
+  }
+  return Response.json(orders);
+}
 
-    const url = new URL(req.url as string);
-    const _id = url.searchParams.get('_id');
-    if (_id) {
-        const order = await Order.findById(_id);
-        return res.json(order);
-    }
+export async function PUT(req: Request) {
+  const url = new URL(req.url);
+  const _id = url.searchParams.get('_id');
 
-    if (admin) {
-        const orders = await Order.find();
-        return res.json(orders);
-    }
+  const updateOrderSchema = z.object({
+    _id: z.string().refine((val) => {
+      return mongoose.Types.ObjectId.isValid(val);
+    }, 'Order id is incorrect'),
+  });
+  const validationResult = updateOrderSchema.safeParse({ _id });
 
-    if (userEmail) {
-        const userOrders = await Order.find({ userEmail });
-        return res.json(userOrders);
-    }
+  if (!validationResult.success) {
+    return Response.json({ error: validationResult.error.issues });
+  }
 
-    return res.status(404).json({ message: "Orders not found" });
+  await Order.updateOne({ _id }, { canceled: true });
+  return Response.json({ message: 'Order has been canceled successfully' });
 }
