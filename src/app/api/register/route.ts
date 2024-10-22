@@ -1,6 +1,7 @@
 import { User } from '@/app/models/User';
 import mongoose from 'mongoose';
 import { z } from 'zod';
+import bcrypt from 'bcrypt';
 
 export async function POST(req: Request) {
   const body = await req.json();
@@ -37,7 +38,9 @@ export async function POST(req: Request) {
       };
     }
 
-    const user = new User({ email, password });
+    const salt = await bcrypt.genSalt(10);
+    const Hashedpassword = await bcrypt.hash(password, salt);
+    const user = new User({ email, password: Hashedpassword });
     await user.save();
     return Response.json({
       message: 'User created successfully',

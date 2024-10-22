@@ -56,7 +56,7 @@ export async function PUT(req: Request) {
     upsert: true,
   });
 
-  if (!result.matchedCount) {
+  if (!result.matchedCount && !result.upsertedCount) {
     return Response.json(
       {
         error: [

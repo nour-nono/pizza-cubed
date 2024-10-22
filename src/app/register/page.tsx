@@ -2,19 +2,26 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { useState } from 'react';
+import { signIn } from 'next-auth/react';
 
 const RegisterPage = () => {
-  const [userEmail, setUserEmail] = useState<string>('');
-  const [userPassword, setUserPassword] = useState<string>('');
-  const [userConfirmPassword, setUserConfirmPassword] = useState<string>('');
-  const [creatingUser, setCreatingUser] = useState<boolean>(false);
-  const [userCreated, setUserCreated] = useState<boolean>(false);
-  const [error, setError] = useState<{ message: string }[]>();
+  const [userEmail, setUserEmail] = useState('');
+  const [userPassword, setUserPassword] = useState('');
+  const [userConfirmPassword, setUserConfirmPassword] = useState('');
+  const [creatingUser, setCreatingUser] = useState(false);
+  const [userCreated, setUserCreated] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
   async function handleSubmit(ev: React.FormEvent) {
     ev.preventDefault();
     setCreatingUser(true);
     setUserCreated(false);
-    setError(undefined);
+    setError(null);
+    if (userPassword !== userConfirmPassword) {
+      setError('Passwords do not match');
+      setCreatingUser(false);
+      return;
+    }
     const response = await fetch('/api/register', {
       method: 'POST',
       body: JSON.stringify({
@@ -29,7 +36,9 @@ const RegisterPage = () => {
       setUserCreated(true);
     } else {
       const data = await response.json();
-      setError(data.error);
+      setError(
+        data.error[0]?.message || 'An error occurred. Please try again.',
+      );
     }
     setCreatingUser(false);
   }
@@ -46,31 +55,24 @@ const RegisterPage = () => {
           <div className='my-4 text-center'>
             User created.
             <br />
-            Now you can
+            Now you can{' '}
             <Link
               className='underline'
-              href={'/login'}
+              href='/login'
             >
-              Login &raquo;
+              Login »
             </Link>
           </div>
         )}
-        {error && (
-          <div className='my-4 text-center'>
-            {error.map(({ message }, index) => (
-              <div key={`msg-err-${index}`}>{message}</div>
-            ))}
-          </div>
-        )}
+        {error && <div className='my-4 text-center text-red-500'>{error}</div>}
         <input
           type='email'
           placeholder='Email'
           value={userEmail}
           required
           disabled={creatingUser}
-          onChange={(ev) => {
-            setUserEmail(ev.target.value);
-          }}
+          onChange={(ev) => setUserEmail(ev.target.value)}
+          className='w-full p-2 mb-2 border rounded'
         />
         <input
           type='password'
@@ -78,9 +80,9 @@ const RegisterPage = () => {
           value={userPassword}
           required
           disabled={creatingUser}
-          onChange={(ev) => {
-            setUserPassword(ev.target.value);
-          }}
+          onChange={(ev) => setUserPassword(ev.target.value)}
+          minLength={8}
+          className='w-full p-2 mb-2 border rounded'
         />
         <input
           type='password'
@@ -88,35 +90,39 @@ const RegisterPage = () => {
           value={userConfirmPassword}
           required
           disabled={creatingUser}
-          onChange={(ev) => {
-            setUserConfirmPassword(ev.target.value);
-          }}
+          onChange={(ev) => setUserConfirmPassword(ev.target.value)}
+          minLength={8}
+          className='w-full p-2 mb-2 border rounded'
         />
         <button
           type='submit'
           disabled={creatingUser}
         >
-          Register
+          {creatingUser ? 'Creating account...' : 'Register'}
         </button>
         <div className='my-4 text-center text-gray-500'>
           or login with provider
         </div>
-        <button className='flex gap-4 justify-center'>
+        <button
+          className='flex gap-4 justify-center'
+          type='button'
+          onClick={() => signIn('google', { callbackUrl: '/' })}
+        >
           <Image
             src={'/google.png'}
-            alt={''}
+            alt={'Google logo'}
             width={24}
             height={24}
           />
-          Login with google
+          Login with Google
         </button>
         <div className='text-center my-4 text-gray-500 border-t pt-4'>
-          Existing account?
+          Existing account?{' '}
           <Link
             className='underline'
             href={'/login'}
           >
-            Login here &raquo;
+            Login here »
           </Link>
         </div>
       </form>
