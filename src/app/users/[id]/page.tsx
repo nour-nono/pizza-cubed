@@ -18,33 +18,33 @@ const EditUserPage = () => {
         });
       });
     }, []);
-
-  if (profileLoading) {
-    return 'Loading user info...';
-  }
-
-  if (!profileData?.userInfos?.admin) {
-    return 'Not an admin';
-  }
-
-  async function handleSaveButtonClick(ev, data) {
-    ev.preventDefault();
-    const promise = new Promise(async (resolve, reject) => {
-      const res = await fetch('/api/profile', {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ ...data, _id: id }),
-      });
-      if (res.ok) resolve(null);
+    
+    async function handleSaveButtonClick(ev, data) {
+      ev.preventDefault();
+      const promise = new Promise(async (resolve, reject) => {
+        const res = await fetch('/api/profile', {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ ...data, _id: id }),
+        });
+        if (res.ok) resolve(null);
       else reject();
     });
-
+    
     await toast.promise(promise, {
       loading: 'Saving...',
       success: 'User saved',
       error: 'An error has occurred while saving the user',
     });
   }
+
+    if (profileLoading) {
+      return 'Loading user info...';
+    }
+  
+    if (!profileData?.userInfos?.admin) {
+      return 'Not an admin';
+    }
 
   return (
     <section className='mt-8 mx-auto max-w-2xl'>

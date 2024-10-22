@@ -26,6 +26,7 @@ const MenuItemPage = () => {
   if (!profileData?.userInfos?.admin) {
     return 'Not an admin';
   }
+
   return (
     <section className='mt-8 max-w-2xl mx-auto'>
       <UserTabs isAdmin={true} />
