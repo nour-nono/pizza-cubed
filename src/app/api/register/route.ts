@@ -1,4 +1,4 @@
-import { User } from '@/app/models/User';
+import { User } from '@/models/User';
 import mongoose from 'mongoose';
 import { z } from 'zod';
 
