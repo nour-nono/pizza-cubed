@@ -13,6 +13,7 @@ interface IExtraPrice {
  */
 interface IMenuItem extends Document {
   name: string;
+  image: string;
   description: string;
   category: mongoose.Types.ObjectId;
   basePrice: number;
@@ -35,7 +36,8 @@ const ExtraPriceSchema = new Schema<IExtraPrice>({
  */
 const MenuItemSchema = new Schema<IMenuItem>(
   {
-    name: { type: String, required: true },
+    name: { type: String, required: true, unique: true },
+    image: { type: String, default: 'https://placehold.co/250x250/jpeg' },
     description: { type: String, required: true },
     category: {
       type: mongoose.Schema.Types.ObjectId,

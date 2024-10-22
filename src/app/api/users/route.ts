@@ -13,7 +13,6 @@ export async function GET() {
   await mongoose.connect(process.env.MONGODB_URI, {
     dbName: process.env.MONGODB_DB,
   });
-  console.log(await isAdmin());
 
   if (await isAdmin()) {
     const list_users = await getUsers();

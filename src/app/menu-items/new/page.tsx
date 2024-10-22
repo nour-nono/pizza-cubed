@@ -1,4 +1,5 @@
 'use client';
+
 import Left from '@/components/icons/Left';
 import MenuItemForm from '@/components/layout/MenuItemForm';
 import UserTabs from '@/components/layout/UserTabs';
@@ -32,6 +33,10 @@ const NewMenuItemPage = () => {
     setRedirectToItems(true);
   }
 
+    if (redirectToItems) {
+      return redirect('/menu-items');
+    }
+
     if (profileLoading) {
       return 'Loading user info...';
     }
@@ -39,10 +44,6 @@ const NewMenuItemPage = () => {
     if (!profileData?.userInfos?.admin) {
       return 'Not an admin';
     }
-
-  if (redirectToItems) {
-    return redirect('/menu-items');
-  }
 
   return (
     <section className='mt-8'>

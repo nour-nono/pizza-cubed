@@ -24,12 +24,19 @@ export async function POST(req: Request) {
     name: z
       .string({ message: 'Name should be a string' })
       .min(1, 'Name is too short'),
+    image: z
+      .string()
+      .min(1, 'Image is too short'),
     description: z
       .string({ message: 'Description should be a string' })
       .min(20, 'Description should be at least 20 characters'),
-    category: z.string().refine((val) => {
-      return mongoose.Types.ObjectId.isValid(val);
-    }, 'Category id is incorrect'),
+    category: z
+      .string({ message: 'Category should be a string' })
+      .min(24, 'Category is too short')
+      .max(24, 'Category is too long'),
+    // .refine((val) => {
+    //   return mongoose.Types.ObjectId.isValid(val);
+    // }, 'Category id is incorrect'),
     basePrice: z
       .number({ message: 'Base price should be a number' })
       .positive('Base price should be positive number'),
@@ -77,6 +84,10 @@ export async function PUT(req: Request) {
         return mongoose.Types.ObjectId.isValid(val);
       }, 'Menu item id is incorrect')
       .optional(),
+    image: z
+      .string()
+      .min(1, 'Image is too short')
+      .optional(),
     name: z
       .string({ message: 'Name should be a string' })
       .min(1, 'Name is too short')
@@ -86,11 +97,15 @@ export async function PUT(req: Request) {
       .min(20, 'Description should be at least 20 characters')
       .optional(),
     category: z
-      .string()
-      .refine((val) => {
-        return mongoose.Types.ObjectId.isValid(val);
-      }, 'Category id is incorrect')
+      .string({ message: 'Category should be a string' })
+      .min(24, 'Category is too short')
+      .max(24, 'Category is too long')
       .optional(),
+      // .string()
+      // .refine((val) => {
+      //   return mongoose.Types.ObjectId.isValid(val);
+      // }, 'Category id is incorrect')
+      // .optional(),
     basePrice: z
       .number({ message: 'Base price should be a number' })
       .positive('Base price should be positive number')
