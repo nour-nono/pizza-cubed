@@ -51,3 +51,5 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/bui
 2 - Marwan Mostafa Elgendy (<marwanano32@gmail.com>)
 3 - Mamdouh Ismael Elnahla (<>)
 4 - Fatima Zohra EZZAIDANI (<>)
+
+## Developer
