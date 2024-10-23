@@ -2,6 +2,9 @@ import { PipelineStage } from 'mongoose';
 import { User } from '@/models/User';
 
 export async function getUsers(matcher?: Record<string, any>) {
+  if (matcher?._id) {
+    return User.findById(matcher._id);
+  }
   const options: PipelineStage[] = [
     {
       $lookup: {

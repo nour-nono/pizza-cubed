@@ -1,10 +1,12 @@
 import Image from 'next/image';
 import { CldImage, CldUploadWidget } from 'next-cloudinary';
 import toast, { Toaster } from 'react-hot-toast';
+import { useParams } from 'next/navigation';
 
 const ImageComponent = ({ imageUrl, setImageUrl }) => {
   const isHttpUrl = imageUrl.startsWith('http');
   const ImageTag = isHttpUrl ? Image : CldImage;
+  const { id } = useParams();
   const handleUpload = async (results) => {
     const res = await fetch('/api/upload', {
       method: 'POST',
@@ -13,6 +15,7 @@ const ImageComponent = ({ imageUrl, setImageUrl }) => {
       },
       body: JSON.stringify({
         image: results.info.public_id,
+        _id: id,
       }),
     });
     if (res.ok) {

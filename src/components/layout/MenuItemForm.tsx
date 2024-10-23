@@ -3,7 +3,9 @@ import MenuItemPriceProps from '@/components/layout/MenuItemPriceProps';
 import { useEffect, useState, useRef } from 'react';
 
 const MenuItemForm = ({ onSubmit, menuItem }) => {
-  const [image, setImage] = useState(menuItem?.image || 'https://placehold.co/250x250/jpeg');
+  const [image, setImage] = useState(
+    menuItem?.image || 'https://placehold.co/250x250/jpeg',
+  );
   const [name, setName] = useState(menuItem?.name || '');
   const [description, setDescription] = useState(menuItem?.description || '');
   const [basePrice, setBasePrice] = useState(menuItem?.basePrice || '');
@@ -76,7 +78,12 @@ const MenuItemForm = ({ onSubmit, menuItem }) => {
             required
             onChange={(ev) => setCategory(ev.target.value)}
           >
-          <option value='' hidden>Select category</option>
+            <option
+              value=''
+              hidden
+            >
+              Select category
+            </option>
             {categories?.length > 0 &&
               categories.map((c) => (
                 <option

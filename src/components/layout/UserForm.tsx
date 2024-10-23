@@ -7,7 +7,7 @@ import { useProfile } from '@/components/UseProfile';
 import ImageComponent from '@/components/layout/ImageComponent';
 
 export default function UserForm({ user, onSave }) {
-  // const [userName, setUserName] = useState(user?.name || '');
+  const [userName, setUserName] = useState(user?.name || '');
   const [phone, setPhone] = useState(user?.userInfos?.phone || '');
   const [streetAddress, setStreetAddress] = useState(
     user?.userInfos?.streetAddress || '',
@@ -45,7 +45,7 @@ export default function UserForm({ user, onSave }) {
         className='grow'
         onSubmit={(ev) => {
           const Ins = {
-            // name: userName,
+            name: userName,
             phone,
             admin,
             streetAddress,
@@ -65,13 +65,13 @@ export default function UserForm({ user, onSave }) {
           onSave(ev, Ins);
         }}
       >
-        {/* <label>First and last name</label>
+        <label>First and last name</label>
         <input
           type='text'
           placeholder='First and last name'
           value={userName}
           onChange={(ev) => setUserName(ev.target.value)}
-        /> */}
+        />
         <label htmlFor='emailInput'>Email</label>
         <input
           type='email'

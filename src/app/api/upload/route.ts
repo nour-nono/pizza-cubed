@@ -20,8 +20,17 @@ export async function ConnectToDB() {
 
 export async function POST(request: Request) {
   const body = await request.json();
-  const session = await getServerSession(authOptions);
-  const email = session?.user?.email;
+
+  const _id = body?._id;
+
+  let email;
+  if (!_id) {
+    const session = await getServerSession(authOptions);
+    email = session?.user?.email;
+  } else {
+    email = await User.findOne({ _id });
+    email = email?.email;
+  }
   const { image } = body;
 
   await ConnectToDB();

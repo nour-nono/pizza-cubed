@@ -11,26 +11,26 @@ const EditUserPage = () => {
   const { loading: profileLoading, data: profileData } = useProfile();
   const { id } = useParams();
 
-    useEffect(() => {
-      fetch('/api/profile?_id=' + id).then((res) => {
-        res.json().then((user) => {
-          setUser(user);
-        });
+  useEffect(() => {
+    fetch('/api/profile?_id=' + id).then((res) => {
+      res.json().then((user) => {
+        setUser(user);
       });
-    }, []);
-    
-    async function handleSaveButtonClick(ev, data) {
-      ev.preventDefault();
-      const promise = new Promise(async (resolve, reject) => {
-        const res = await fetch('/api/profile', {
-          method: 'PUT',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ ...data, _id: id }),
-        });
-        if (res.ok) resolve(null);
+    });
+  }, []);
+
+  async function handleSaveButtonClick(ev, data) {
+    ev.preventDefault();
+    const promise = new Promise(async (resolve, reject) => {
+      const res = await fetch('/api/profile', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ ...data, _id: id }),
+      });
+      if (res.ok) resolve(null);
       else reject();
     });
-    
+
     await toast.promise(promise, {
       loading: 'Saving...',
       success: 'User saved',
@@ -38,13 +38,13 @@ const EditUserPage = () => {
     });
   }
 
-    if (profileLoading) {
-      return 'Loading user info...';
-    }
-  
-    if (!profileData?.userInfos?.admin) {
-      return 'Not an admin';
-    }
+  if (profileLoading) {
+    return 'Loading user info...';
+  }
+
+  if (!profileData?.userInfos?.admin) {
+    return 'Not an admin';
+  }
 
   return (
     <section className='mt-8 mx-auto max-w-2xl'>

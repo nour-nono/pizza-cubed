@@ -16,36 +16,36 @@ const EditMenuItemPage = () => {
   const [redirectToItems, setRedirectToItems] = useState(false);
   const { loading: profileLoading, data: profileData } = useProfile();
 
-    useEffect(() => {
-      fetch('/api/menu-items').then((res) => {
-        res.json().then((items) => {
-          const item = items.find((i) => i._id === id);
-          setMenuItem(item);
-        });
+  useEffect(() => {
+    fetch('/api/menu-items').then((res) => {
+      res.json().then((items) => {
+        const item = items.find((i) => i._id === id);
+        setMenuItem(item);
       });
-    }, []);
-    
-    async function handleFormSubmit(ev, data) {
-      ev.preventDefault();
-      data = { ...data, _id: id };
-      const savingPromise = new Promise(async (resolve, reject) => {
-        const response = await fetch('/api/menu-items', {
-          method: 'PUT',
+    });
+  }, []);
+
+  async function handleFormSubmit(ev, data) {
+    ev.preventDefault();
+    data = { ...data, _id: id };
+    const savingPromise = new Promise(async (resolve, reject) => {
+      const response = await fetch('/api/menu-items', {
+        method: 'PUT',
         body: JSON.stringify(data),
         headers: { 'Content-Type': 'application/json' },
       });
       response.ok ? resolve(null) : reject();
     });
-    
+
     await toast.promise(savingPromise, {
       loading: 'Saving this tasty item',
       success: 'Saved',
       error: 'Error',
     });
-    
+
     setRedirectToItems(true);
   }
-  
+
   async function handleDeleteClick() {
     const promise = new Promise(async (resolve, reject) => {
       const res = await fetch('/api/menu-items?_id=' + id, {
@@ -54,23 +54,23 @@ const EditMenuItemPage = () => {
       if (res.ok) resolve(null);
       else reject();
     });
-    
+
     await toast.promise(promise, {
       loading: 'Deleting...',
       success: 'Deleted',
       error: 'Error',
     });
-    
+
     setRedirectToItems(true);
   }
 
-    if (profileLoading) {
-      return 'Loading user info...';
-    }
-  
-    if (!profileData?.userInfos?.admin) {
-      return 'Not an admin';
-    }
+  if (profileLoading) {
+    return 'Loading user info...';
+  }
+
+  if (!profileData?.userInfos?.admin) {
+    return 'Not an admin';
+  }
 
   if (redirectToItems) {
     return redirect('/menu-items');
