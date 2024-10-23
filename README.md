@@ -1,7 +1,6 @@
 ## Overview
 
-This project is designed to streamline the delivery process for [food]. It provides a user-friendly interface for customers to place orders and track their deliveries in real-time.
-
+This project is designed to streamline the delivery process for food Delivery. It provides a user-friendly interface for customers to place orders and track their deliveries in real-time.
 
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
@@ -48,7 +47,7 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/bui
 
 ## Owners
 
-1 - Nour Eldeen Mohamed
-2 - Marwan Mostafa Elgendy
-3 - Mamdouh Ismael Elnahla
-4 - Fatima Zohra EZZAIDANI
+1 - Nour Eldeen Mohamed (<nour98nour@gmail.com>)
+2 - Marwan Mostafa Elgendy (<marwanano32@gmail.com>)
+3 - Mamdouh Ismael Elnahla (<>)
+4 - Fatima Zohra EZZAIDANI (<>)
