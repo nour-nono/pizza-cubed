@@ -1,3 +1,7 @@
+## Overview
+This project is designed to streamline the delivery process for [food]. It provides a user-friendly interface for customers to place orders and track their deliveries in real-time.
+
+
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
 ## Getting Started
