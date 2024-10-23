@@ -47,6 +47,17 @@ export async function PUT(req: Request) {
   if (!validationResult.success) {
     return Response.json({ error: validationResult.error.issues });
   }
+  if (body?._id && !(await isAdmin())) {
+    return Response.json(
+      {
+        error: [
+          {
+            message: 'User not found',
+          },
+        ],
+      },
+    );
+  }
   let email;
   if (!body?._id) {
     email = await getUserEmail();
@@ -91,6 +102,9 @@ export async function GET(req: Request) {
   let email;
   if (!_id) {
     email = await getUserEmail();
+  } else {
+    email = await User.findOne({ _id });
+    email = email?.email;
   }
   if (!email && !_id) {
     return Response.json({ error: [{ message: 'User email not found' }] });
@@ -104,7 +118,7 @@ export async function GET(req: Request) {
   });
   let user: (typeof User)[] | null = null;
   if (_id) {
-    user = await getUsers({ _id });
+    user = await getUsers({ email });
   } else {
     user = await getUsers({ email });
   }

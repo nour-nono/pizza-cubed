@@ -1,6 +1,6 @@
 'use client';
 import AddressInputs from '@/components/layout/AddressInputs';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { CldUploadWidget, CldImage } from 'next-cloudinary';
 import Image from 'next/image';
 import { useProfile } from '@/components/UseProfile';
@@ -22,6 +22,17 @@ export default function UserForm({ user, onSave }) {
     user?.image || 'samples/man-portrait',
   );
   const { data: loggedInUserData } = useProfile();
+
+  useEffect(() => {
+    setUserName(user?.name || '');
+    setPhone(user?.userInfos?.phone || '');
+    setStreetAddress(user?.userInfos?.streetAddress || '');
+    setPostalCode(user?.userInfos?.postalCode || '');
+    setCity(user?.userInfos?.city || '');
+    setCountry(user?.userInfos?.country || '');
+    setAdmin(user?.userInfos?.admin || false);
+    setImageUrl(user?.image || 'https://placehold.co/250x250/jpeg');
+  }, [user]);
 
   function handleAddressChange(propName, value) {
     if (propName === 'phone') setPhone(value);
