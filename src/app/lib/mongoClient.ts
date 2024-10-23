@@ -1,20 +1,28 @@
-import { MongoDBAdapter } from '@auth/mongodb-adapter';
 import { MongoClient } from 'mongodb';
-import mongoose from 'mongoose';
+import mongoose, { Mongoose } from 'mongoose';
 
-if (!process.env.MONGODB_URI) {
-  throw new Error('Missing env variable: "MONGODB_URI"');
-}
+type Cache = {
+  client: Mongoose | null;
+};
 
-const client = new MongoClient(process.env.MONGODB_URI, {});
-const clientPromise = client.connect();
+const cache: Cache = {
+  client: null,
+};
 
-export async function MongoDBConnection() {
+export async function mongoConnect(): Promise<MongoClient> {
+  if (cache.client && cache.client.connection.readyState) {
+    return cache.client.connection.getClient();
+  }
+
   if (!process.env.MONGODB_URI || !process.env.MONGODB_DB) {
     throw new Error('Missing env variables: "MONGODB_URI" Or "MONGODB_DB"');
   }
-  return mongoose.connect(process.env.MONGODB_URI, {
+
+  const mongooseClient = await mongoose.connect(process.env.MONGODB_URI, {
     dbName: process.env.MONGODB_DB,
   });
+
+  cache.client = mongooseClient;
+
+  return mongooseClient.connection.getClient();
 }
-export default clientPromise;

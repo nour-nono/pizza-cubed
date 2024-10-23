@@ -1,4 +1,5 @@
 import { isAdmin, getUserEmail } from '@/app/api/auth/[...nextauth]/route';
+import { mongoConnect } from '@/app/lib/mongoClient';
 import { getUsers } from '@/app/lib/userInfos';
 import { User } from '@/models/User';
 import { UserInfo } from '@/models/UserInfo';
@@ -7,12 +8,7 @@ import mongoose from 'mongoose';
 import { z } from 'zod';
 
 export async function GET() {
-  if (!process.env.MONGODB_URI || !process.env.MONGODB_DB) {
-    throw new Error('Missing env variables: "MONGODB_URI" Or "MONGODB_DB"');
-  }
-  await mongoose.connect(process.env.MONGODB_URI, {
-    dbName: process.env.MONGODB_DB,
-  });
+  await mongoConnect();
   console.log(await isAdmin());
 
   if (await isAdmin()) {

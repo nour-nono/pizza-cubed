@@ -2,6 +2,7 @@ import { User } from '@/models/User';
 import mongoose from 'mongoose';
 import { z } from 'zod';
 import bcrypt from 'bcrypt';
+import { mongoConnect } from '@/app/lib/mongoClient';
 
 export async function POST(req: Request) {
   const body = await req.json();
@@ -22,12 +23,7 @@ export async function POST(req: Request) {
   try {
     userSchema.parse(body);
 
-    if (!process.env.MONGODB_URI || !process.env.MONGODB_DB) {
-      throw new Error('Missing env variables: "MONGODB_URI" Or "MONGODB_DB"');
-    }
-    mongoose.connect(process.env.MONGODB_URI, {
-      dbName: process.env.MONGODB_DB,
-    });
+    await mongoConnect();
     const { email, password } = body;
     const existedUser = await User.findOne({ email });
 

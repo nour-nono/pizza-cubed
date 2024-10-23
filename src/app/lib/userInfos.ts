@@ -1,5 +1,6 @@
 import { PipelineStage } from 'mongoose';
 import { User } from '@/models/User';
+import { mongoConnect } from './mongoClient';
 
 export async function getUsers(matcher?: Record<string, any>) {
   const options: PipelineStage[] = [
@@ -27,5 +28,7 @@ export async function getUsers(matcher?: Record<string, any>) {
       $match: matcher,
     });
   }
+
+  await mongoConnect();
   return User.aggregate(options);
 }

@@ -1,11 +1,11 @@
 import { isAdmin, getUserEmail } from '@/app/api/auth/[...nextauth]/route';
-import { MongoDBConnection } from '@/app/lib/mongoClient';
+import { mongoConnect } from '@/app/lib/mongoClient';
 import { Order } from '@/models/Order';
 import mongoose from 'mongoose';
 import { z } from 'zod';
 
 export async function GET() {
-  await MongoDBConnection();
+  await mongoConnect();
   let options = {};
 
   if (!(await isAdmin())) {
