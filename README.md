@@ -43,3 +43,4 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/bui
 
 1-Register for an account or log in.
 2-Place an order by selecting items and providing delivery details.
+3-Track your order status through your dashboard.
