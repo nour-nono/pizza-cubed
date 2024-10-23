@@ -1,8 +1,7 @@
 import { isAdmin, getUserEmail } from '@/app/api/auth/[...nextauth]/route';
+import { mongoConnect } from '@/app/lib/mongoClient';
 import { getUsers } from '@/app/lib/userInfos';
-import { User } from '@/models/User';
 import { UserInfo } from '@/models/UserInfo';
-import mongoose from 'mongoose';
 import { z } from 'zod';
 
 const POSTAL_CODE_REGEX = /(^\d{5}$)|(^\d{5}-\d{4}$)/;
@@ -46,12 +45,7 @@ export async function PUT(req: Request) {
 
   const email = await getUserEmail();
 
-  if (!process.env.MONGODB_URI || !process.env.MONGODB_DB) {
-    throw new Error('Missing env variables: "MONGODB_URI" Or "MONGODB_DB"');
-  }
-  await mongoose.connect(process.env.MONGODB_URI, {
-    dbName: process.env.MONGODB_DB,
-  });
+  await mongoConnect();
   const result = await UserInfo.updateOne({ email }, validationResult.data, {
     upsert: true,
   });
@@ -77,13 +71,6 @@ export async function GET() {
   if (!email) {
     return Response.json({ error: [{ message: 'User email not found' }] });
   }
-
-  if (!process.env.MONGODB_URI || !process.env.MONGODB_DB) {
-    throw new Error('Missing env variables: "MONGODB_URI" Or "MONGODB_DB"');
-  }
-  await mongoose.connect(process.env.MONGODB_URI, {
-    dbName: process.env.MONGODB_DB,
-  });
   const user = await getUsers({ email });
   return Response.json(user);
 }
