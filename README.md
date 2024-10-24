@@ -50,5 +50,4 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/bui
 1 - Nour Eldeen Mohamed (<nour98nour@gmail.com>)
 2 - Marwan Mostafa Elgendy (<marwanano32@gmail.com>)
 3 - Mamdouh Ismael Elnahla (<>)
-4 - Fatima Zohra EZZAIDANI (<>)
-
+4 - Fatima Zohra EZZAIDANI (<ezzaidanifatimazohra@gmail.com>)
