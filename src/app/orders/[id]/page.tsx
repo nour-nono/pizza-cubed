@@ -21,12 +21,13 @@ export default function OrderPage() {
       setLoadingOrder(true);
       fetch('/api/orders?_id=' + id).then((res) => {
         res.json().then((orderData) => {
-          setOrder(orderData[0]);
+          setOrder(orderData);
           setLoadingOrder(false);
         });
       });
     }
   }, []);
+console.log('order page');
 
   let subtotal = 0;
   if (order?.cartProducts) {
