@@ -3,7 +3,6 @@ import { MenuItem } from '@/models/MenuItem';
 import { Order } from '@/models/Order';
 import mongoose from 'mongoose';
 import { getServerSession } from 'next-auth';
-import { NextApiRequest, NextApiResponse } from 'next';
 import Stripe from 'stripe';
 
 const stripe = new Stripe(process.env.STRIPE_SK as string, {
@@ -24,13 +23,14 @@ interface Address {
   country: string;
 }
 
-export async function POST(req: NextApiRequest, res: NextApiResponse) {
-  await mongoose.connect(process.env.MONGO_URL as string);
-
+export async function POST(req: Request) {
+  await mongoose.connect(process.env.MONGODB_URI as string, {
+    dbName: process.env.MONGODB_DB,
+  });
   const {
     cartProducts,
     address,
-  }: { cartProducts: CartProduct[]; address: Address } = req.body;
+  }: { cartProducts: CartProduct[]; address: Address } = await req.json();
 
   const session = await getServerSession(authOptions);
   const userEmail = session?.user?.email;
@@ -84,8 +84,8 @@ export async function POST(req: NextApiRequest, res: NextApiResponse) {
     line_items: stripeLineItems,
     mode: 'payment',
     customer_email: userEmail,
-    success_url: `${process.env.NEXTAUTH_URL}orders/${orderDoc._id.toString()}?clear-cart=1`,
-    cancel_url: `${process.env.NEXTAUTH_URL}cart?canceled=1`,
+    success_url: `${process.env.NEXTAUTH_URL}/orders/${orderDoc._id.toString()}?clear-cart=1`,
+    cancel_url: `${process.env.NEXTAUTH_URL}/cart?canceled=1`,
     metadata: { orderId: orderDoc._id.toString() },
     payment_intent_data: {
       metadata: { orderId: orderDoc._id.toString() },
@@ -101,5 +101,5 @@ export async function POST(req: NextApiRequest, res: NextApiResponse) {
     ],
   });
 
-  res.json({ url: stripeSession.url });
+  return Response.json(stripeSession.url);
 }

@@ -4,7 +4,7 @@ import UserTabs from '@/components/layout/UserTabs';
 import { useProfile } from '@/components/UseProfile';
 import { useParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
-import toast, { Toaster } from 'react-hot-toast';
+import toast from 'react-hot-toast';
 
 const EditUserPage = () => {
   const [user, setUser] = useState(null);
@@ -48,7 +48,6 @@ const EditUserPage = () => {
 
   return (
     <section className='mt-8 mx-auto max-w-2xl'>
-      <Toaster />
       <UserTabs isAdmin={true} />
       <div className='mt-8'>
         <UserForm

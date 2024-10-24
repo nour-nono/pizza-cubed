@@ -42,7 +42,8 @@ const MenuItemForm = ({ onSubmit, menuItem }) => {
           basePrice: +basePrice,
           sizes,
           extraIngredientPrices,
-        })}
+        })
+      }
       className='mt-8 max-w-2xl mx-auto'
     >
       <div

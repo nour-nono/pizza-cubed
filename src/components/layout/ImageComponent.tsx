@@ -1,6 +1,6 @@
 import Image from 'next/image';
 import { CldImage, CldUploadWidget } from 'next-cloudinary';
-import toast, { Toaster } from 'react-hot-toast';
+import toast from 'react-hot-toast';
 import { useParams } from 'next/navigation';
 
 const ImageComponent = ({ imageUrl, setImageUrl }) => {
@@ -25,7 +25,6 @@ const ImageComponent = ({ imageUrl, setImageUrl }) => {
   };
   return (
     <>
-      <Toaster />
       <ImageTag
         className='rounded-lg w-full h-full mb-1'
         src={imageUrl}

@@ -3,7 +3,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import Stripe from 'stripe';
 
 const stripe = new Stripe(process.env.STRIPE_SK as string, {
-  apiVersion: '2022-11-15',
+  apiVersion: '2024-09-30.acacia',
 });
 
 export async function POST(req: NextRequest) {

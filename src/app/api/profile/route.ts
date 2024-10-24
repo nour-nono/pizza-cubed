@@ -48,15 +48,13 @@ export async function PUT(req: Request) {
     return Response.json({ error: validationResult.error.issues });
   }
   if (body?._id && !(await isAdmin())) {
-    return Response.json(
-      {
-        error: [
-          {
-            message: 'User not found',
-          },
-        ],
-      },
-    );
+    return Response.json({
+      error: [
+        {
+          message: 'User not found',
+        },
+      ],
+    });
   }
   let email;
   if (!body?._id) {
