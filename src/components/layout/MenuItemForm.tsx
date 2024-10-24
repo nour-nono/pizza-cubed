@@ -1,14 +1,16 @@
 import ImageComponent from '@/components/layout/ImageComponent';
 import MenuItemPriceProps from '@/components/layout/MenuItemPriceProps';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 
 const MenuItemForm = ({ onSubmit, menuItem }) => {
-  const [image, setImage] = useState(menuItem?.image || 'cld-sample-4');
+  const [image, setImage] = useState(
+    menuItem?.image || 'https://placehold.co/250x250/jpeg',
+  );
   const [name, setName] = useState(menuItem?.name || '');
   const [description, setDescription] = useState(menuItem?.description || '');
   const [basePrice, setBasePrice] = useState(menuItem?.basePrice || '');
   const [sizes, setSizes] = useState(menuItem?.sizes || []);
-  const [category, setCategory] = useState(menuItem?.category || '');
+  const [category, setCategory] = useState(menuItem?.category?.name || '');
   const [categories, setCategories] = useState([]);
   const [extraIngredientPrices, setExtraIngredientPrices] = useState(
     menuItem?.extraIngredientPrices || [],
@@ -20,19 +22,26 @@ const MenuItemForm = ({ onSubmit, menuItem }) => {
         setCategories(categories);
       });
     });
-  }, []);
+    setImage(menuItem?.image || 'https://placehold.co/250x250/jpeg');
+    setName(menuItem?.name || '');
+    setDescription(menuItem?.description || '');
+    setBasePrice(menuItem?.basePrice || '');
+    setSizes(menuItem?.sizes || []);
+    setCategory(menuItem?.category?.name || '');
+    setExtraIngredientPrices(menuItem?.extraIngredientPrices || []);
+  }, [menuItem]);
 
   return (
     <form
       onSubmit={(ev) =>
         onSubmit(ev, {
-          image,
           name,
+          image,
           description,
-          basePrice,
+          category,
+          basePrice: +basePrice,
           sizes,
           extraIngredientPrices,
-          category,
         })
       }
       className='mt-8 max-w-2xl mx-auto'
@@ -52,6 +61,7 @@ const MenuItemForm = ({ onSubmit, menuItem }) => {
           <input
             id='Item name'
             type='text'
+            required
             value={name}
             onChange={(ev) => setName(ev.target.value)}
           />
@@ -60,13 +70,21 @@ const MenuItemForm = ({ onSubmit, menuItem }) => {
             id='Item description'
             type='text'
             value={description}
+            required
             onChange={(ev) => setDescription(ev.target.value)}
           />
           <label>Category</label>
           <select
             value={category}
+            required
             onChange={(ev) => setCategory(ev.target.value)}
           >
+            <option
+              value=''
+              hidden
+            >
+              Select category
+            </option>
             {categories?.length > 0 &&
               categories.map((c) => (
                 <option
@@ -80,8 +98,9 @@ const MenuItemForm = ({ onSubmit, menuItem }) => {
           <label htmlFor='Item Base price'>Base price</label>
           <input
             id='Item Base price'
-            type='text'
+            type='number'
             value={basePrice}
+            required
             onChange={(ev) => setBasePrice(ev.target.value)}
           />
           <MenuItemPriceProps

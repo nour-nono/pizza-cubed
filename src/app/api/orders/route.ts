@@ -4,7 +4,7 @@ import { Order } from '@/models/Order';
 import mongoose from 'mongoose';
 import { z } from 'zod';
 
-export async function GET() {
+export async function GET(req: Request) {
   await MongoDBConnection();
   let options = {};
 
@@ -14,13 +14,25 @@ export async function GET() {
       userEmail: email,
     };
   }
+
+  // if the url has id of the order, then return this specific order
+  const url = new URL(req.url);
+  const _id = url.searchParams.get('_id');
+  if (_id) {
+    const res = await Order.findById(_id);
+    return Response.json(res);
+  }
+
   const orders = await Order.find(options);
+  // actually, that's not an error, this a valid response
+  /*
   if (!orders.length) {
     return Response.json(
       { error: [{ message: 'No orders founds' }] },
       { status: 404 },
     );
   }
+  */
   return Response.json(orders);
 }
 

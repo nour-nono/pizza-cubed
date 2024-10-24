@@ -40,28 +40,31 @@ const MenuItemPage = () => {
         </Link>
       </div>
       <div>
-        <h2 className='text-sm text-gray-500 mt-8'>Edit menu item:</h2>
-        <div className='grid grid-cols-3 gap-2'>
-          {menuItems?.length > 0 &&
-            menuItems.map((item) => (
-              <Link
-                key={item._id}
-                href={'/menu-items/edit/' + item._id}
-                className='bg-gray-200 rounded-lg p-4'
-              >
-                <div className='relative'>
-                  <Image
-                    className='rounded-md'
-                    src={item.image}
-                    alt={''}
-                    width={200}
-                    height={200}
-                  />
-                </div>
-                <div className='text-center'>{item.name}</div>
-              </Link>
-            ))}
-        </div>
+        {menuItems?.length > 0 && (
+          <>
+            <h2 className='text-sm text-gray-500 mt-8'>Edit menu item:</h2>
+            <div className='grid grid-cols-3 gap-2'>
+              {menuItems.map((item) => (
+                <Link
+                  key={item._id}
+                  href={'/menu-items/edit/' + item._id}
+                  className='bg-gray-200 rounded-lg p-4'
+                >
+                  <div className='relative'>
+                    <Image
+                      className='rounded-md'
+                      src={item.image}
+                      alt={''}
+                      width={200}
+                      height={200}
+                    />
+                  </div>
+                  <div className='text-center'>{item.name}</div>
+                </Link>
+              ))}
+            </div>
+          </>
+        )}
       </div>
     </section>
   );

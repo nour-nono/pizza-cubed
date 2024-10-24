@@ -14,7 +14,10 @@ const MenuItemPriceProps = ({ name, addLabel, props, setProps }) => {
   }
 
   function editProp(ev, index, prop) {
-    const newValue = ev.target.value;
+    let newValue = ev.target.value;
+    if (prop === 'price') {
+      newValue = +newValue;
+    }
     setProps((prevSizes) => {
       const newSizes = [...prevSizes];
       newSizes[index][prop] = newValue;
@@ -57,7 +60,7 @@ const MenuItemPriceProps = ({ name, addLabel, props, setProps }) => {
               <div>
                 <label>Extra price</label>
                 <input
-                  type='text'
+                  type='number'
                   placeholder='Extra price'
                   value={size.price}
                   onChange={(ev) => editProp(ev, index, 'price')}

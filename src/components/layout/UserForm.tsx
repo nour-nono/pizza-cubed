@@ -1,13 +1,13 @@
 'use client';
 import AddressInputs from '@/components/layout/AddressInputs';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { CldUploadWidget, CldImage } from 'next-cloudinary';
 import Image from 'next/image';
 import { useProfile } from '@/components/UseProfile';
 import ImageComponent from '@/components/layout/ImageComponent';
 
 export default function UserForm({ user, onSave }) {
-  // const [userName, setUserName] = useState(user?.name || '');
+  const [userName, setUserName] = useState(user?.name || '');
   const [phone, setPhone] = useState(user?.userInfos?.phone || '');
   const [streetAddress, setStreetAddress] = useState(
     user?.userInfos?.streetAddress || '',
@@ -22,6 +22,17 @@ export default function UserForm({ user, onSave }) {
     user?.image || 'samples/man-portrait',
   );
   const { data: loggedInUserData } = useProfile();
+
+  useEffect(() => {
+    setUserName(user?.name || '');
+    setPhone(user?.userInfos?.phone || '');
+    setStreetAddress(user?.userInfos?.streetAddress || '');
+    setPostalCode(user?.userInfos?.postalCode || '');
+    setCity(user?.userInfos?.city || '');
+    setCountry(user?.userInfos?.country || '');
+    setAdmin(user?.userInfos?.admin || false);
+    setImageUrl(user?.image || 'https://placehold.co/250x250/jpeg');
+  }, [user]);
 
   function handleAddressChange(propName, value) {
     if (propName === 'phone') setPhone(value);
@@ -45,7 +56,7 @@ export default function UserForm({ user, onSave }) {
         className='grow'
         onSubmit={(ev) => {
           const Ins = {
-            // name: userName,
+            name: userName,
             phone,
             admin,
             streetAddress,
@@ -65,13 +76,13 @@ export default function UserForm({ user, onSave }) {
           onSave(ev, Ins);
         }}
       >
-        {/* <label>First and last name</label>
+        <label>First and last name</label>
         <input
           type='text'
           placeholder='First and last name'
           value={userName}
           onChange={(ev) => setUserName(ev.target.value)}
-        /> */}
+        />
         <label htmlFor='emailInput'>Email</label>
         <input
           type='email'

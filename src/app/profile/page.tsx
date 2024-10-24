@@ -3,7 +3,7 @@ import UserTabs from '@/components/layout/UserTabs';
 import { useSession } from 'next-auth/react';
 import UserForm from '@/components/layout/UserForm';
 import { redirect } from 'next/navigation';
-import toast, { Toaster } from 'react-hot-toast';
+import toast from 'react-hot-toast';
 import { useState, useEffect } from 'react';
 
 export default function ProfilePage() {
@@ -56,7 +56,6 @@ export default function ProfilePage() {
 
   return (
     <section className='mt-8'>
-      <Toaster />
       <UserTabs isAdmin={isAdmin} />
       <div className='max-w-2xl mx-auto mt-8'>
         <UserForm
