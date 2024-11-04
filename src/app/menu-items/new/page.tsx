@@ -1,4 +1,5 @@
 'use client';
+
 import Left from '@/components/icons/Left';
 import MenuItemForm from '@/components/layout/MenuItemForm';
 import UserTabs from '@/components/layout/UserTabs';
@@ -11,7 +12,7 @@ import toast from 'react-hot-toast';
 const NewMenuItemPage = () => {
   const [redirectToItems, setRedirectToItems] = useState(false);
   const { loading: profileLoading, data: profileData } = useProfile();
-  
+
   async function handleFormSubmit(ev, data) {
     ev.preventDefault();
     const savingPromise = new Promise(async (resolve, reject) => {
@@ -22,26 +23,26 @@ const NewMenuItemPage = () => {
       });
       response.ok ? resolve(null) : reject();
     });
-    
+
     await toast.promise(savingPromise, {
       loading: 'Saving...',
       success: 'Saved',
       error: 'Error',
     });
-    
+
     setRedirectToItems(true);
   }
 
-    if (profileLoading) {
-      return 'Loading user info...';
-    }
-  
-    if (!profileData?.userInfos?.admin) {
-      return 'Not an admin';
-    }
-
   if (redirectToItems) {
     return redirect('/menu-items');
+  }
+
+  if (profileLoading) {
+    return 'Loading user info...';
+  }
+
+  if (!profileData?.userInfos?.admin) {
+    return 'Not an admin';
   }
 
   return (
@@ -62,6 +63,6 @@ const NewMenuItemPage = () => {
       />
     </section>
   );
-}
+};
 
 export default NewMenuItemPage;

@@ -1,7 +1,18 @@
+'use client';
 import Image from 'next/image';
 import MenuItem from '@/components/menu/MenuItem';
 import SectionHeaders from '@/components/layout/SectionHeaders';
+import { useEffect, useState } from 'react';
+
 export default function Menu() {
+  const [bestSellers, setBestSellers] = useState([]);
+  useEffect(() => {
+    fetch('/api/menu-items').then((res) => {
+      res.json().then((menuItems) => {
+        setBestSellers(menuItems.slice(-3));
+      });
+    });
+  }, []);
   return (
     <section className='text-center'>
       <div
@@ -30,17 +41,18 @@ export default function Menu() {
       </div>
       <div className='text-center'>
         <SectionHeaders
-          subHeader={'CHECK OUT'}
+          subHeader={'OUR BEST SELLERS'}
           mainHeader={'Menu'}
         />
       </div>
       <div className='grid grid-cols-3 gap-4'>
-        <MenuItem />
-        <MenuItem />
-        <MenuItem />
-        <MenuItem />
-        <MenuItem />
-        <MenuItem />
+        {bestSellers?.length > 0 &&
+          bestSellers.map((item) => (
+            <MenuItem
+              key={item._id}
+              {...item}
+            />
+          ))}
       </div>
     </section>
   );

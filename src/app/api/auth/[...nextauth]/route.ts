@@ -10,7 +10,9 @@ import { UserInfo } from '@/models/UserInfo';
 
 export const authOptions: NextAuthOptions = {
   secret: process.env.NEXTAUTH_SECRET,
-  adapter: MongoDBAdapter(clientPromise),
+  adapter: MongoDBAdapter(clientPromise, {
+    databaseName: process.env.MONGODB_DB,
+  }),
   session: {
     strategy: 'jwt',
     maxAge: 30 * 24 * 60 * 60,
