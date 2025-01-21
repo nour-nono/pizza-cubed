@@ -27,7 +27,6 @@ export default function OrderPage() {
       });
     }
   }, []);
-console.log('order page');
 
   let subtotal = 0;
   if (order?.cartProducts) {

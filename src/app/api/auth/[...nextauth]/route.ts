@@ -1,12 +1,11 @@
 import * as mongoose from 'mongoose';
 import bcrypt from 'bcrypt';
-import NextAuth, { getServerSession, NextAuthOptions } from 'next-auth';
+import NextAuth, { NextAuthOptions } from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
 import GoogleProvider from 'next-auth/providers/google';
 import { MongoDBAdapter } from '@auth/mongodb-adapter';
 import clientPromise from '@/app/lib/mongoClient';
 import { User } from '@/models/User';
-import { UserInfo } from '@/models/UserInfo';
 
 export const authOptions: NextAuthOptions = {
   secret: process.env.NEXTAUTH_SECRET,
@@ -56,32 +55,7 @@ export const authOptions: NextAuthOptions = {
   ],
 };
 
-export async function isAdmin() {
-  const session = await getServerSession(authOptions);
-  const userEmail = session?.user?.email;
-  if (!userEmail) {
-    return false;
-  }
 
-  if (!process.env.MONGODB_URI || !process.env.MONGODB_DB) {
-    throw new Error('Missing env variables: "MONGODB_URI" Or "MONGODB_DB"');
-  }
-  await mongoose.connect(process.env.MONGODB_URI, {
-    dbName: process.env.MONGODB_DB,
-  });
-  const userInfo = await UserInfo.findOne({ email: userEmail });
-
-  if (!userInfo) {
-    return false;
-  }
-  return userInfo.admin;
-}
-
-export async function getUserEmail() {
-  const session = await getServerSession(authOptions);
-  const userEmail = session?.user?.email;
-  return userEmail;
-}
 
 const handler = NextAuth(authOptions);
 

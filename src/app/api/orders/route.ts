@@ -1,4 +1,4 @@
-import { isAdmin, getUserEmail } from '@/app/api/auth/[...nextauth]/route';
+import { isAdmin, getUserEmail } from '@/app/lib/userInfos';
 import { MongoDBConnection } from '@/app/lib/mongoClient';
 import { Order } from '@/models/Order';
 import mongoose from 'mongoose';
@@ -14,7 +14,8 @@ export async function GET(req: Request) {
       userEmail: email,
     };
   }
-
+  console.log('reach here orders 1 #################');
+  
   // if the url has id of the order, then return this specific order
   const url = new URL(req.url);
   const _id = url.searchParams.get('_id');

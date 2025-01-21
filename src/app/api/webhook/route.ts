@@ -7,6 +7,7 @@ const stripe = new Stripe(process.env.STRIPE_SK as string, {
 });
 
 export async function POST(req: NextRequest) {
+  console.log('reach here webhook 1 #################');
   const sig = req.headers.get('stripe-signature') as string;
   let event: Stripe.Event;
 
@@ -20,6 +21,7 @@ export async function POST(req: NextRequest) {
   }
 
   if (event.type === 'checkout.session.completed') {
+    
     const orderId = (event.data.object as any).metadata.orderId;
     const isPaid = (event.data.object as any).payment_status === 'paid';
     if (isPaid) {
