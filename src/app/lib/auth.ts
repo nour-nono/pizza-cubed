@@ -1,13 +1,13 @@
 import * as mongoose from 'mongoose';
 import bcrypt from 'bcrypt';
-import { NextAuthOptions } from 'next-auth';
+import { AuthOptions } from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
 import GoogleProvider from 'next-auth/providers/google';
 import { MongoDBAdapter } from '@auth/mongodb-adapter';
 import clientPromise from '@/app/lib/mongoClient';
 import { User } from '@/models/User';
 
-export const authOptions: NextAuthOptions = {
+export const authOptions: AuthOptions = {
   secret: process.env.NEXTAUTH_SECRET,
   adapter: MongoDBAdapter(clientPromise, {
     databaseName: process.env.MONGODB_DB,
