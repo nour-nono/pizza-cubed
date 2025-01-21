@@ -1,7 +1,7 @@
 import mongoose from 'mongoose';
 import { User } from '@/models/User';
 import { getServerSession } from 'next-auth';
-import { authOptions } from '@/app/api/auth/[...nextauth]/route';
+import { authOptions } from '@/app/lib/auth';
 
 export async function ConnectToDB() {
   if (!process.env.MONGODB_URI || !process.env.MONGODB_DB) {
