@@ -7,7 +7,6 @@ const stripe = new Stripe(process.env.STRIPE_SK as string, {
 });
 
 export async function POST(req: NextRequest) {
-  console.log('reach here webhook 1 #################');
   const sig = req.headers.get('stripe-signature') as string;
   let event: Stripe.Event;
 

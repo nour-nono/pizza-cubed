@@ -14,7 +14,6 @@ export async function GET(req: Request) {
       userEmail: email,
     };
   }
-  console.log('reach here orders 1 #################');
   
   // if the url has id of the order, then return this specific order
   const url = new URL(req.url);

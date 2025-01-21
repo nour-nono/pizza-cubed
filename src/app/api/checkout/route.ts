@@ -34,7 +34,6 @@ export async function POST(req: Request) {
 
   const session = await getServerSession(authOptions);
   const userEmail = session?.user?.email;
-console.log('reach here checkout 1 #################');
 
   const orderDoc = await Order.create({
     userEmail,
