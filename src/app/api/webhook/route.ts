@@ -20,6 +20,7 @@ export async function POST(req: NextRequest) {
   }
 
   if (event.type === 'checkout.session.completed') {
+    
     const orderId = (event.data.object as any).metadata.orderId;
     const isPaid = (event.data.object as any).payment_status === 'paid';
     if (isPaid) {

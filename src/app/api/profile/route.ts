@@ -1,5 +1,4 @@
-import { isAdmin, getUserEmail } from '@/app/api/auth/[...nextauth]/route';
-import { getUsers } from '@/app/lib/userInfos';
+import { isAdmin, getUserEmail, getUsers } from '@/app/lib/userInfos';
 import { User } from '@/models/User';
 import { UserInfo } from '@/models/UserInfo';
 import mongoose from 'mongoose';
@@ -43,7 +42,7 @@ export async function PUT(req: Request) {
       return data;
     });
   const validationResult = await userInfoSchema.safeParseAsync(body);
-
+  
   if (!validationResult.success) {
     return Response.json({ error: validationResult.error.issues });
   }
